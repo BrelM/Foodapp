@@ -1,7 +1,9 @@
-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
+token:
+	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
 
 to push:
-	git push https://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@github.com/BrelM/Foodapp.git
+	git push https://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@github.com/BrelM/Foodapp.git
 
 to pull:
+	git pull https://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@github.com/BrelM/Foodapp.git
 	
