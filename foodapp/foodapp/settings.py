@@ -31,13 +31,14 @@ ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'visitor.apps.VisitorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug-toolbar',
+    'debug_toolbar',
     
 ]
 
@@ -80,7 +81,7 @@ WSGI_APPLICATION = 'foodapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'food.db',
         'PORT': '5432',
     }
 }
