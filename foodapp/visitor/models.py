@@ -87,8 +87,9 @@ class Meal(Ressource):
         Implementation of Meal class
         A meal might be composed of Food objects but also of Meals objects
     '''    
+    description = models.CharField(max_length=100, null = True)
 
-    ingredients = models.ManyToManyField(Food, related_name='+', blank=True, through='Uses')
+    ingredients = models.ManyToManyField(Food, related_name='+', blank=True)
     submeals = models.ManyToManyField('self', blank=True)
     operator = models.ForeignKey(Operator, related_name='meals', blank=True, null=True, on_delete=models.CASCADE)
     likers = models.ManyToManyField(Operator, related_name='likedMeals', through='MealAppreciation')
@@ -123,7 +124,7 @@ class Menu(models.Model):
     name = models.CharField(max_length=20, null=False, default='random menu')
     description = models.CharField(max_length=50, blank=True)
 
-    meals = models.ManyToManyField(Meal, related_name='menus', blank=False)
+    meals = models.ManyToManyField(Meal, related_name='+', blank=False)
     operator = models.ForeignKey(Operator, related_name='menus', blank=True, null=True, on_delete=models.CASCADE)
     likers = models.ManyToManyField(Operator, related_name='likedMenus', through='MenuAppreciation')
     commentors = models.ManyToManyField(Operator, related_name='commentedMenus', through='MenuCommenting')
@@ -147,10 +148,8 @@ class MealCommenting(models.Model):
     '''
     commentor = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-    content = models.BooleanField(default=True)
+    content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
-
-
 
 
 
@@ -171,18 +170,9 @@ class MenuCommenting(models.Model):
     '''
     commentor = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
-    content = models.BooleanField(default=True)
+    content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
 
-
-
-class Uses(models.Model):
-    '''
-        Implementation of the commenting many to many relationship between Operator model and Menu model
-    '''
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
 
 
 
