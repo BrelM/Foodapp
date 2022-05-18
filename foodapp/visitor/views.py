@@ -147,14 +147,14 @@ def search(request, filter, order):
         Look for ressources (Food, Meal or Menu objects) satisfying the passed string
     '''
     if request.method == 'GET':
-        if filter='none':
+        if filter == 'none':
             results = None
         else:
             with open('results', 'rb') as results_file:
                 results_raw = pickle.Unpickler(results_file).load()
                 results = results_raw['results']
                 filter = results_raw['filter']
-                order = results_raw['order']*
+                order = results_raw['order']
 
                 # Calls for sorting functions in requirement.py
 
