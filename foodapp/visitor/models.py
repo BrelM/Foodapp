@@ -173,7 +173,6 @@ class MenuCommenting(models.Model):
     content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
 
-#I change nothing
 
 
 

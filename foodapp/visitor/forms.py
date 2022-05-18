@@ -1,7 +1,6 @@
-
+#from django.forms import ModelForm, TextInput
 from django import forms
 from .models import Food, Meal
-
 
 class MealForm(forms.Form):
 
@@ -55,3 +54,18 @@ class MenuForm(forms.Form):
         max_length=30,
         widget=forms.TextInput(attrs={'class':'', 'placeholder':'Select the meals composing your meal (optiional)'}),
     )
+
+
+
+
+'''
+class MealForm(ModelForm):
+    class meta:
+        model = Meal
+        fields = ['name', 'description', 'ingredients', 'submeals'],
+
+
+
+
+
+'''
