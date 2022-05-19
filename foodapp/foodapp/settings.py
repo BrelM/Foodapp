@@ -124,8 +124,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+     BASE_DIR / 'visitor/static',
+     BASE_DIR / 'user/static'
+]
+
 #File storage
-MEDIA_ROOT = 'Storage/'
+MEDIA_ROOT = BASE_DIR / 'Storage/'
 MEDIA_URL = 'Storage/'
 
 # Default primary key field type

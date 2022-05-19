@@ -2,14 +2,14 @@ import pickle
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseRedirect
 from django.contrib import auth
-from foodapp.visitor.models import *
+from visitor.models import *
 
 from user.models import Operator
-from requirement import *
+from visitor.requirement import *
 
 # Create your views here.
 def index(request):
-    content = get_random_content(request.user)
+    content = None #get_random_content(request.user)
     return render(request, 'visitor/index.html', {'content': content})
 
 
