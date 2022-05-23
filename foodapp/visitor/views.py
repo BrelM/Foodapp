@@ -1,6 +1,7 @@
 import pickle
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.contrib import auth
 from visitor.models import *
 
@@ -38,19 +39,22 @@ def register(request):
 
 def log_in(request):
     '''
-        Verify user's informations and if they are correct, he's set as the current user.
+        Verify user's informations and if they are correct, he's set as the current user (he's no longer anonymous).
         If not, he's told that the inserted informations aren't valid
     '''
     if request.method == 'GET':
         return render(request, 'visitor/log_in.html')
     else:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         try:
-            user = auth.authenticate(username=request.POST.get('name'), password=request.POST.get('password'))
-            auth.login(user)
-
-            return HttpResponseRedirect('operator:home_page')
+            user = auth.authenticate(username=username, password=password)
+            auth.login(request, user)
+            
+            if user: return HttpResponseRedirect('/user/home_page/')
+            else: raise ValueError()
         except:
-            return HttpResponseRedirect('visitor/log_in.html', {'error': "Ce compte semble ne pas exister."})
+            return render(request, 'visitor/log_in.html', {'error': "Ce compte semble ne pas exister."})
 
 
 

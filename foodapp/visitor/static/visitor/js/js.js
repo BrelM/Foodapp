@@ -10,3 +10,18 @@ function chargement()
 	Obj.appendChild(Obj1);
 	document.getElementsByTagName('body')[0].appendChild(Obj);
 }
+
+
+function unhidePassword(){
+	
+	pwdTag = document.getElementById('pwd');
+	if (pwdTag.type=="password"){
+		pwdTag.type = 'text';
+		document.getElementById('hide').innerHTML = "Cacher";
+	}
+	else{
+		pwdTag.type = 'password';
+		document.getElementById('hide').innerHTML = "Afficher";
+	}
+
+}

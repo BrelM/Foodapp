@@ -9,6 +9,6 @@ def home_page(request):
     '''
     content = get_random_content(request.user)
 
-    return render('user/home_page.html', {'content': content})
+    return render(request, 'user/home_page.html', {'content': content})
 
 

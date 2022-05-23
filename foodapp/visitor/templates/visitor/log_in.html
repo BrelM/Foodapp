@@ -1,36 +1,35 @@
+{% extends 'visitor/base.html' %}
+
 {% block content %}
 
 {% load static %}
 
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/css.css' %}">
-	<title>food</title>
-</head>
-<body>
 	<div class="main-connexion">
-		<form action="">
+		<form action="{% url 'visitor:log_in' %}" method="POST">
+			{% csrf_token %}
+			{% if error %}
+				<div class="item_connexion">
+					{{ error }}
+				</div>
+			{% endif %}
 			<div class="item-connexion i1">
 				<div class="icon-connect">
 					
 				</div>
-				<input type="text" name="user" value="USERNAME" >
+				<input type="text" name="username" placeholder="Username" >
 			</div>
 			<div class="item-connexion i2">
 				<div class="icon-connect">
 					
 				</div>
-				<input type="password" name="password" value="PASSWORD">
+				<input type="password" name="password" placeholder="Password" id='pwd'>
 			</div>
 			<div class="item-connexion ">
-				<input type="submit" value="SEND">
+				<input type="submit" value="Log in">
 			</div>
+
 		</form>
+		<button id='hide' class="item_connexion" onclick=unhidePassword()>Afficher</button>
 	</div>
-</body>
-</html>
 
 {% endblock content %}
