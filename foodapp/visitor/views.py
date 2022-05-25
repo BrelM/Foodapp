@@ -24,7 +24,7 @@ def register(request):
         Takes user's informations and create a user object (an account)
     '''
     if request.method == 'GET':
-        return render(request, 'registration.html', {})
+        return render(request, 'visitor/registration.html', {})
     else:
         user = Operator.objects.create_user(
                 username=request.POST.get('name'), 

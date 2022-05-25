@@ -79,6 +79,8 @@ class Food(Ressource):
     '''
     unit = models.CharField(max_length=50, null=False, default=' unit(s) of ')
 
+    def getUnit(self):
+        return self.unit
 
 
 
