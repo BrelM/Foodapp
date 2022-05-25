@@ -5,15 +5,16 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/css.css' %}">
-	<script src="{% static 'visitor/js/js.js' %}"></script>
-	<title>food</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/item.css' %}">
+	<script src="{% static 'visitor/js/js.js' %}"/></script>
+	<title>FoodApp</title>
 </head>
 <body>
 
 
 	<div class="header">
 		<div class="logo">
-			<a href="index.html" class="title">
+			<a href="{% url 'visitor:index' %}" class="title">
 				FoodApp
 			</a>
 		</div>
@@ -28,27 +29,21 @@
 					<img src="{% static 'visitor/images/glass.png' %}">
 				</a>	
 			</div>
-			<div class="icon">
-				<a href="#" class="image">
-					<img src="{% static 'visitor/images/bell-fill.svg' %}">
-				</a>	
-			</div>
 			
 			<div class="icon">
 				<a href="#" class="image">
 					<img src="{% static 'visitor/images/file-person.svg' %}">
-				</a>	
-			</div>
-			<div class="icon">
-				<a href="#" class="image">
-					<img src="{% static 'visitor/images/list.svg' %}">
-				</a>	
+				</a>
+				<div class="user">
+					<a href="{% url 'visitor:log_in' %}">log in</a>
+					<a href="{% url 'visitor:registration' %}">sign up</a>
+				</div>
 			</div>
 
 			<div class="icon">
 				<a href="#" class="image">
 					<img src="{% static 'visitor/images/config.svg' %}">
-				</a>	
+				</a>
 			</div>
 		</div>
 
@@ -59,13 +54,9 @@
 			
 		</div>
 
-			{% block content %}
-
-
-			{% endblock %}
+			{% block content %}{% endblock %}
 	</div>
-    <div class="footer">		
-    </div>
+    <div class="footer"></div>
 
 
 </body>

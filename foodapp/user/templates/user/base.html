@@ -1,6 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/css.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/item.css' %}">
+	<script src="{% static 'visitor/js/js.js' %}"></script>
+	<title>FoodApp</title>
+</head>
+<body>
 
 
-//Exemple inclusion de fichier .js ou .css
+	<div class="header">
+		<div class="logo">
+			<a href="{% url 'user:home_page' %}" class="title">
+				FoodApp
+			</a>
+		</div>
+		<div class="between">
+			<div class="icon searchbar">
+				<form name="search" action="#" method="get">
+					<input type="text" name="keyword" maxlength="15" required>
+				</form>
+			</div>
+			<div class="icon">
+				<a href="#" class="image">
+					<img src="{% static 'visitor/images/glass.png' %}">
+				</a>
+			</div>
+			<div class="icon">
+				<a href="#" class="image">
+					<img src="{% static 'visitor/images/bell-fill.svg' %}">
+				</a>	
+			</div>
+			
+			<div class="icon">
+				<a href="#" class="image">
+					<img src="{% static 'visitor/images/file-person.svg' %}">
+				</a>
+				<div class="user">
+					<a href="">account settings</a>
+					<a href="">log out</a>
+				</div>
+			</div>
+			<div class="icon">
+				<a href="#" class="image">
+					<img src="{% static 'visitor/images/list.svg' %}">
+				</a>
+				<div class="user">
+					<a href="">Your meals</a>
+					<a href="">Your Menus</a>
+				</div>
+			</div>
 
-<script src="user/exemple.js>"> //exemple.js se trouve dans foodapp/user/static/user/
-<style rel='stylesheet' href="user/exemple.css>"></style> //exemple.js se trouve dans foodapp/user/static/user/
+			<div class="icon">
+				<a href="#" class="image">
+					<img src="{% static 'visitor/images/config.svg' %}">
+				</a>	
+			</div>
+		</div>
+
+	</div>
+
+	<div class="main">
+		<div class="silde_bar">
+			
+		</div>
+
+			{% block content %}
+
+
+			{% endblock %}
+	</div>
+    <div class="footer">		
+    </div>
+
+
+</body>
+</html>

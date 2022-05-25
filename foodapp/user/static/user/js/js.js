@@ -10,3 +10,4 @@ function chargement()
 	Obj.appendChild(Obj1);
 	document.getElementsByTagName('body')[0].appendChild(Obj);
 }
+

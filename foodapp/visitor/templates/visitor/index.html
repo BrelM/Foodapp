@@ -3,7 +3,7 @@
 
 {% load static %}
 <div class="conteneur">
-			
+	{% for i in content %}
 	<div class="item">
 		<div class="item-image">
 			<a href="#" class="image-cadre">
@@ -30,14 +30,14 @@
 			<div class="item-appre">
 				<div class="like-comment">
 					<div class="like">
-						<a href="#" class="appre-image" onclick="alert('You just liked!')">
+						<a href="#" class="appre-image" onclick=logInFirst()>
 							<img src="{% static 'visitor/images/gear-fill.svg' %}">
 						</a>
 						<p class="number">1K</p>
 					</div>
 					<div class="between-like-comment"></div>
 					<div class="comment">
-						<a href="#" class="appre-image">
+						<a href="#" onclick=logInFirst() class="appre-image">
 							<img src="{% static 'visitor/images/gear-fill.svg' %}">
 						</a>
 						<p class="number">20</p>
@@ -46,11 +46,11 @@
 				<div class="comment-bar">
 					<div class="comment-input">
 						<form name="comment" action="#" method="get">
-							<input type="text" class="input-zone" name="keyword" placeholder="Write something" required>
+							<input type="text" class="input-zone" name="keyword" placeholder="Write something" onclick=logInFirst() required>
 						</form>
 					</div>
 					<div class="send-comment">
-						<a href="#" class="appre-image">
+						<a href="#" class="appre-image" onclick=logInFirst()>
 							<img src="{% static 'visitor/images/gear-fill.svg' %}">
 						</a>
 					</div>
@@ -60,7 +60,7 @@
 		
 
 	</div>
-	
+	{% endfor %}
 
 </div>
 

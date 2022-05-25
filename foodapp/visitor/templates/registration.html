@@ -1,0 +1,51 @@
+{% extends 'visitor/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="main-connexion" style="padding-top: 2%; padding-bottom: 2%; margin-top: 4%;">
+	<div id="sp">
+		Please, give some informations about yourself in order to register
+	</div>
+
+
+	<form id="form" action="{% url 'visitor:registration' %}" method="POST" onSubmit=checkPwd()>
+
+        {% csrf_token %}
+
+        <div class="item-connexion">
+			<img src="{% static 'visitor/images/file-person.svg' %}">
+			<input type="text" name="username" class="input-login" placeholder="Username" >
+		</div>
+        <div id="errorLogin">{{ error.username }}</div>
+
+        <div class="item-connexion">
+			<img src="{% static 'visitor/images/file-person.svg' %}">
+			<input type="text" name="mail" class="input-login" placeholder="E-mail" >
+            
+        </div>
+        <div id="errorMail">{{ error.mail }}</div>
+
+		<div class="item-connexion">
+			<img src="{% static 'visitor/images/key-fill.svg' %}">
+			<input type="password" name="password" class="input-login" placeholder="Password" id='pwd'>
+			<a id='hide' href="#" onclick=unhidePassword('pwd') style="padding-top:0%; height:100%; padding-top: 2.5%">Display</a>
+		</div>
+        <div id="errorPwd">{{ error.password }}</div>
+
+        <div class="item-connexion">
+			<img src="{% static 'visitor/images/key-fill.svg' %}">
+			<input type="password" name="password_conf" class="input-login" placeholder="Password confirmation" id='pwdConf' style="width: 80%;">
+			<a id='hideConf' href="#" onclick=unhidePassword('pwdConf') style="padding-top:0%; height:100%; padding-top: 2.5%">Display</a>
+		</div>
+        <div id="errorPwdConf">{{ error.password }}</div>
+
+        <div class="item-connexion"style="padding-top:0%;">
+			<input type="submit" value="Sign up">
+		</div>
+
+	</form>
+</div>
+
+{% endblock content %}

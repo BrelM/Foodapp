@@ -10,9 +10,8 @@ from visitor.requirement import *
 
 # Create your views here.
 def index(request):
-    content = None #get_random_content(request.user)
+    content = [2, 3 , 4] #get_random_content(request.user)
     return render(request, 'visitor/index.html', {'content': content})
-
 
 
 
@@ -25,7 +24,7 @@ def register(request):
         Takes user's informations and create a user object (an account)
     '''
     if request.method == 'GET':
-        return render(request, 'register.html', {})
+        return render(request, 'registration.html', {})
     else:
         user = Operator.objects.create_user(
                 username=request.POST.get('name'), 
@@ -35,6 +34,7 @@ def register(request):
             )
 
         return HttpResponseRedirect('visitor:log_in')
+
 
 
 def log_in(request):

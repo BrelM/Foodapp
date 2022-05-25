@@ -4,32 +4,27 @@
 
 {% load static %}
 
-	<div class="main-connexion">
-		<form action="{% url 'visitor:log_in' %}" method="POST">
-			{% csrf_token %}
-			{% if error %}
-				<div class="item_connexion">
-					{{ error }}
-				</div>
-			{% endif %}
-			<div class="item-connexion i1">
-				<div class="icon-connect">
-					
-				</div>
-				<input type="text" name="username" placeholder="Username" >
-			</div>
-			<div class="item-connexion i2">
-				<div class="icon-connect">
-					
-				</div>
-				<input type="password" name="password" placeholder="Password" id='pwd'>
-			</div>
-			<div class="item-connexion ">
-				<input type="submit" value="Log in">
-			</div>
-
-		</form>
-		<button id='hide' class="item_connexion" onclick=unhidePassword()>Afficher</button>
+<div class="main-connexion">
+	<div id="sp">
+		Identify yourself to log in
 	</div>
+	<form id="form" action="{% url 'visitor:log_in' %}" method="POST">
+		{% csrf_token %}
+		{{ error }}
+		<div class="item-connexion">
+			<img src="{% static 'visitor/images/file-person.svg' %}">
+			<input type="text" name="username" class="input-login" placeholder="Username" >
+		</div>
+		<div class="item-connexion">
+			<img src="{% static 'visitor/images/key-fill.svg' %}">
+			<input type="password" name="password" class="input-login" placeholder="Password" id='pwd'>
+			<a id='hide' href="#" onclick=unhidePassword('pwd')>Display</a>
+		</div>
+		<div class="item-connexion">
+			<input type="submit" value="Log in">
+		</div>
+
+	</form>
+</div>
 
 {% endblock content %}

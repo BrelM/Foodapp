@@ -1,53 +1,67 @@
+{% extends 'user/base.html' %}
 {% block content %}
 
 {% load static %}
+<div class="conteneur">
+			
+	<div class="item">
+		<div class="item-image">
+			<a href="#" class="image-cadre">
+				<img src="{% static 'visitor/images/final.png' %}" class="round-image-borders">
+			</a>
+		</div>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="{% static 'visitor/css/css.css' %}">
-	<title>Food</title>
-</head>
-<body>
-	<div class="header">
-		<div class="logo">
-			<font>FOOD</font>
-		</div>
-		<div class="icon user">
-			
-		</div>
-		<div class="icon setting">
-			
-		</div>
-		<div class="icon notive">
-			
-		</div>
-	</div>
-	<div class="main">
-		<div class="slide_bar">
-			
-		</div>
-		<div class="conteneur">
-			<div class="item">
-				
+		<div class="empty-frame"></div>
+		<div class="item-content">
+			<div class="item-title">
+				<p class="">
+					Titre
+				</p>
 			</div>
-			<div class="item">
-				
-			</div>
-			<div class="item">
-				
-			</div>
-			<div class="item">
-				
+			<a href="#" class="a-content">
+				<div class="between-detail-elements"></div>
+				<div class="item-description">
+					<p class="">
+						Ceci est une description!
+					</p>
+				</div>
+			</a>
+			<div class="between-detail-elements"></div>
+			<div class="item-appre">
+				<div class="like-comment">
+					<div class="like">
+						<a href="#" class="appre-image" onclick="alert('You just liked!')">
+							<img src="{% static 'visitor/images/gear-fill.svg' %}">
+						</a>
+						<p class="number">1K</p>
+					</div>
+					<div class="between-like-comment"></div>
+					<div class="comment">
+						<a href="#" class="appre-image">
+							<img src="{% static 'visitor/images/gear-fill.svg' %}">
+						</a>
+						<p class="number">20</p>
+					</div>
+				</div>
+				<div class="comment-bar">
+					<div class="comment-input">
+						<form name="comment" action="#" method="get">
+							<input type="text" class="input-zone" name="keyword" placeholder="Write something" required>
+						</form>
+					</div>
+					<div class="send-comment">
+						<a href="#" class="appre-image">
+							<img src="{% static 'visitor/images/gear-fill.svg' %}">
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="footer">
 		
+
 	</div>
-</body>
-</html>
+	
+
+</div>
 
 {% endblock %}
