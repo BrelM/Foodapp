@@ -2,19 +2,18 @@ import pickle
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.contrib import auth
 from visitor.models import *
 
 from user.models import Operator
-from visitor.requirement import *
+from visitor import requirement
+
+folder = 'visitor'
 
 # Create your views here.
 def index(request):
-    content = [2, 3 , 4] #get_random_content(request.user)
-    return render(request, 'visitor/index.html', {'content': content})
-
-
+    content = requirement.get_random_content()
+    return render(request, folder + '/index.html', {'content': content})
 
 #################################################################################################################################################################
 ################################################################### Account #####################################################################################
@@ -25,7 +24,7 @@ def register(request):
         Takes user's informations and create a user object (an account)
     '''
     if request.method == 'GET':
-        return render(request, 'visitor/registration.html', {})
+        return render(request, folder + '/registration.html', {})
     else:
         user = Operator.objects.create_user(
                 username=request.POST.get('username'), 
@@ -44,7 +43,7 @@ def log_in(request):
         If not, he's told that the inserted informations aren't valid
     '''
     if request.method == 'GET':
-        return render(request, 'visitor/log_in.html')
+        return render(request, folder + '/log_in.html')
     else:
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -59,7 +58,7 @@ def log_in(request):
                     return HttpResponseRedirect('/user/home_page/')
             else: raise ValueError()
         except:
-            return render(request, 'visitor/log_in.html', {'error': "Ce compte semble ne pas exister."})
+            return render(request, folder + '/log_in.html', {'error': "Ce compte semble ne pas exister."})
 
 
 
@@ -74,7 +73,7 @@ def all_foods(request):
     '''
     foods = get_list_or_404(Food)
 
-    return render(request, 'visitor/foods.html', {'foods':foods})
+    return render(request, folder + '/foods.html', {'content':foods})
 
 
 
@@ -85,7 +84,7 @@ def all_meals(request):
     '''
     meals = get_list_or_404(Meal)
 
-    return render(request, 'visitor/meals.html', {'meals':meals})
+    return render(request, folder + '/meals.html', {'content':meals})
 
 
 def all_menus(request):
@@ -94,7 +93,7 @@ def all_menus(request):
     '''
     menus = get_list_or_404(Menu)
 
-    return render(request, 'visitor/menus.html', {'menus':menus})
+    return render(request, folder + '/menus.html', {'content':menus})
 
 
 def food_detail(request, id):
@@ -103,7 +102,7 @@ def food_detail(request, id):
     '''
     food = get_object_or_404(Food, id=id)
     
-    return render(request, 'visitor/food_detail.html', {'food':food})
+    return render(request, folder + '/food_detail.html', {'content':food})
 
 
 def meal_detail(request, id):
@@ -112,7 +111,7 @@ def meal_detail(request, id):
     '''
     meal = get_object_or_404(Meal, id=id)
     
-    return render(request, 'visitor/meal_detail.html', {'meal':meal})
+    return render(request, folder + '/meal_detail.html', {'content':meal})
 
 
 def menu_detail(request, id):
@@ -121,7 +120,7 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, 'visitor/menu_detail.html', {'menu':menu})
+    return render(request, folder + '/menu_detail.html', {'content':menu})
 
 
 
@@ -154,11 +153,12 @@ def search(request, filter, order):
                 order = results_raw['order']
 
                 # Calls for sorting functions in requirement.py
+                requirement
 
             context = {
                 'results': results,
             }
-            return render(request, request, 'visitor/search.html', context)
+            return render(request, request, folder + '/search.html', context)
     else:
         with open('results', 'wb') as results_file:
             pass

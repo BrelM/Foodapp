@@ -5,23 +5,22 @@ from user.models import Operator
 
 class Vitamin(models.Model):
     name= models.CharField(max_length=2, null=True)
-'''        ('A', 'A'),
-        ('B', 'B'),
-        ('C', 'C'),
-        ('D','D'),
-        ('E', 'E')
-'''    
+
+        
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "Vitamin : "+self.name
+
 class Mineral(models.Model):
     name= models.CharField(max_length=2, null=True)
 
-MINERALS = [
-    ('sodium', 'sodium'),
-    ('calcium', 'calcium'),
-    ('potassium', 'potassium'),
-    ('phosphore', 'phosphore'),
-    ('calcaire', 'calcaire'),
-]
+    def __str__(self) -> str:
+        return self.__repr__()
 
+    def __repr__(self) -> str:
+        return "Mineral : "+self.name
 
 
 class Ressource(models.Model):
@@ -34,6 +33,7 @@ class Ressource(models.Model):
         abstract = True
 
     name = models.CharField(max_length=30, null=False, default='unknown ressource')
+    description = models.CharField(max_length=300, null=False, default='unknown description')
     creation_date = models.DateField(auto_now=True)
     fat = models.FloatField(default=0)
     proteins = models.FloatField(default=0)
@@ -43,12 +43,16 @@ class Ressource(models.Model):
     kcal = models.FloatField(default=0)
     picture = models.ImageField(null=True)
     
-    vitamins = models.ManyToManyField(Vitamin, related_name='+')
-    minerals = models.ManyToManyField(Mineral, related_name='+')
+    vitamins = models.ManyToManyField(Vitamin, related_name='+', blank=True)
+    minerals = models.ManyToManyField(Mineral, related_name='+', blank=True)
 
     # Getters
     def get_name(self) -> str:
         return self.name
+    
+    def get_description(self) -> str:
+        return self.description
+    
     def get_creation_date(self) -> models.DateField:
         return self.creation_date
 
@@ -68,22 +72,22 @@ class Ressource(models.Model):
         return self.water
 
     def get_vitamins(self) -> list:
-        return self.vitamins
+        return list(self.vitamins)
 
     def get_minerals(self) -> list:
-        return self.minerals
+        return list(self.minerals)
 
     def get_kcal(self) -> float:
         return self.kcal
-    # Setters
-    def set_name(self, name):
-        self.name = name
 
+    # Setters
     def set_attributes(self, **kwargs):
         if kwargs['name']:
             self.name = kwargs['name']
         if kwargs['creation_date']:
             self.creation_date = kwargs['creation_date']
+        if kwargs['description']:
+            self.description = kwargs['description']
         if kwargs['fat']:
             self.fat = kwargs['fat']
         if kwargs['proteins']:
@@ -113,7 +117,7 @@ class Food(Ressource):
     '''
     unit = models.CharField(max_length=50, null=False, default=' unit(s) of ')
 
-    def getUnit(self) -> str:
+    def get_unit(self) -> str:
         return self.unit
 
 
@@ -139,15 +143,17 @@ class Meal(Ressource):
         elements = list(self.elements.all()) + list(self.submeals.all())
 
         for element in elements:
-            self.fat += element.fat
-            self.proteins += element.proteins
-            self.fiber += element.fiber
-            self.carbohydrates += element.carbohydrates
-            self.water += element.water
-            self.kcal += element.kcal
-            self.vitamins += element.vitamins
-            self.minerals += element.minerals
-
+            self.fat += element.get_fat()
+            self.proteins += element.get_proteins()
+            self.fiber += element.get_fiber()
+            self.carbohydrates += element.get_carbohydrates()
+            self.water += element.get_water()
+            self.kcal += element.get_kcal()
+            self.vitamins += element.get_vitamins()
+            self.minerals += element.get_minerals()
+    
+    def set_name(self, name:str):
+        self.name = name
 
 
 
@@ -160,10 +166,31 @@ class Menu(models.Model):
     name = models.CharField(max_length=20, null=False, default='random menu')
     creation_date = models.DateField(auto_now=True)
     description = models.CharField(max_length=50, blank=True)
+
     meals = models.ManyToManyField(Meal, related_name='+', blank=False)
     operator = models.ForeignKey(Operator, related_name='menus', blank=True, null=True, on_delete=models.CASCADE)
     likers = models.ManyToManyField(Operator, related_name='likedMenus', through='MenuAppreciation')
     commentors = models.ManyToManyField(Operator, related_name='commentedMenus', through='MenuCommenting')
+
+    # Getters
+    def get_name(self) -> str:
+        return self.name
+    
+    def get_description(self) -> str:
+        return self.description
+    
+    def get_creation_date(self) -> models.DateField:
+        return self.creation_date
+
+        # Setters
+    def set_name(self, name):
+        self.name = name
+    
+    def set_description(self, description):
+        self.description = description
+
+    def set_creation_date(self, date):
+        self.creation_date = date
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -180,6 +207,7 @@ class MealAppreciation(models.Model):
     '''
     appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+   
     value = models.BooleanField(default=True)
     date = models.DateField(auto_now=True)
 
@@ -191,6 +219,7 @@ class MealCommenting(models.Model):
     '''
     commentor = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+   
     content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
 
@@ -202,6 +231,7 @@ class MenuAppreciation(models.Model):
     '''
     appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
+   
     value = models.BooleanField(default=True)
     date = models.DateField(auto_now=True)
 
@@ -213,6 +243,7 @@ class MenuCommenting(models.Model):
     '''
     commentor = models.ForeignKey(Operator, on_delete=models.CASCADE)
     meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
+   
     content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
 

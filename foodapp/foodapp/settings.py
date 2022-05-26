@@ -141,3 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Default user class
 AUTH_USER_MODEL = 'user.Operator'
+
+# default login url
+LOGIN_URL = '/visitor/log_in'

@@ -1,21 +1,32 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import auth
 from django.db import transaction
 from visitor.models import *
 
-import pickle, os
+import pickle
 
 from visitor.requirement import *
 
+folder = 'user'
 
+@login_required
 def home_page(request):
     '''
         Open the current user's home page
     '''
     content = get_random_content()
 
-    return render(request, 'user/home_page.html', {'content': content})
+    return render(request, folder + '/home_page.html', {'content': content})
 
 
+def log_out(request):
+    '''
+        log out the current user
+    '''
+    auth.logout(request)
+    return HttpResponseRedirect('/visitor/log_in')
 
 #################################################################################################################################################################
 ################################################################### Display content #############################################################################
@@ -28,7 +39,7 @@ def all_foods(request):
     '''
     foods = get_list_or_404(Food)
 
-    return render(request, 'user/foods.html', {'foods':foods})
+    return render(request, folder + '/foods.html', {'foods':foods})
 
 
 
@@ -39,38 +50,41 @@ def all_meals(request):
     '''
     meals = get_list_or_404(Meal)
 
-    return render(request, 'user/meals.html', {'meals':meals})
+    return render(request, folder + '/meals.html', {'meals':meals})
 
 
 
+@login_required
 def my_meals(request):
     '''
         Display Meal objects managed by the current user
     '''
     meals = get_list_or_404(Meal, operator=request.user)
 
-    return render(request, 'user/meals.html', {'meals':meals})
+    return render(request, folder + '/meals.html', {'meals':meals})
 
 
 
 
+@login_required
 def all_menus(request):
     '''
         Display all available Menu objects in the database
     '''
     menus = get_list_or_404(Menu)
 
-    return render(request, 'user/menus.html', {'menus':menus})
+    return render(request, folder + '/menus.html', {'menus':menus})
 
 
 
+@login_required
 def my_menus(request):
     '''
         Display Menu objects managed by the current user
     '''
     menus = get_list_or_404(Menu, operator=request.user)
 
-    return render(request, 'user/menus.html', {'menus':menus})
+    return render(request, folder + '/menus.html', {'menus':menus})
 
 
 def food_detail(request, id):
@@ -79,7 +93,7 @@ def food_detail(request, id):
     '''
     food = get_object_or_404(Food, id=id)
     
-    return render(request, 'user/food_detail.html', {'food':food})
+    return render(request, folder + '/food_detail.html', {'food':food})
 
 
 def meal_detail(request, id):
@@ -88,7 +102,7 @@ def meal_detail(request, id):
     '''
     meal = get_object_or_404(Meal, id=id)
     
-    return render(request, 'user/meal_detail.html', {'meal':meal})
+    return render(request, folder + '/meal_detail.html', {'meal':meal})
 
 
 def menu_detail(request, id):
@@ -97,7 +111,7 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, 'user/menu_detail.html', {'menu':menu})
+    return render(request, folder + '/menu_detail.html', {'menu':menu})
 
 
 
@@ -107,6 +121,7 @@ def menu_detail(request, id):
 ################################################################## Interact with content ########################################################################
 #################################################################################################################################################################
 
+@login_required
 @transaction.atomic
 def like_meal(request, id):
     '''
@@ -120,6 +135,7 @@ def like_meal(request, id):
 
 
 
+@login_required
 @transaction.atomic
 def like_menu(request, id):
     '''
@@ -155,7 +171,7 @@ def search(request, filter, order):
             context = {
                 'results': results,
             }
-            return render(request, request, 'user/search.html', context)
+            return render(request, request, folder + '/search.html', context)
     else:
         with open('results', 'wb') as results_file:
             pass

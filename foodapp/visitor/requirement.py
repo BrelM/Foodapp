@@ -1,8 +1,18 @@
-from xmlrpc.client import Boolean
+from django.http import HttpResponseRedirect
 from .models import Operator
 from visitor.models import *
 
 import random
+
+
+def require_login(request):
+    '''
+        Check if the current user is anonymous or not.
+        If yes, redirect him/her to the login page.
+    '''
+    if not request.user:
+        return HttpResponseRedirect('visitor/log_in')
+
 
 def get_random_content() -> list:
     '''
@@ -30,7 +40,7 @@ def sort_by_type(result:list=[]) -> dict:
 
 
 
-def sort_by_name(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_name(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by names) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -46,7 +56,7 @@ def sort_by_name(result:list=[], reverse:Boolean=False) -> list:
     return list(result)
 
 
-def sort_by_date(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_date(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by dates) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -61,7 +71,7 @@ def sort_by_date(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_fat(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_fat(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by fat) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -76,7 +86,7 @@ def sort_by_fat(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_proteins(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_proteins(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by proteins) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -91,7 +101,7 @@ def sort_by_proteins(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_carbohydrates(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_carbohydrates(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by carbohydrates) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -106,7 +116,7 @@ def sort_by_carbohydrates(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_fiber(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_fiber(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by fiber) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -121,7 +131,7 @@ def sort_by_fiber(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_water(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_water(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by water) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -136,7 +146,7 @@ def sort_by_water(result:list=[], reverse:Boolean=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_kcal(result:list=[], reverse:Boolean=False) -> list:
+def sort_by_kcal(result:list=[], reverse:bool=False) -> list:
     '''Sort a list of Food, Meal or Menu objects (by kcal) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):

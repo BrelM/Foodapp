@@ -3,65 +3,66 @@
 
 {% load static %}
 <div class="conteneur">
-	{% for i in content %}
-	<div class="item">
-		<div class="item-image">
-			<a href="#" class="image-cadre">
-				<img src="{% static 'visitor/images/final.png' %}" class="round-image-borders">
-			</a>
-		</div>
-
-		<div class="empty-frame"></div>
-		<div class="item-content">
-			<div class="item-title">
-				<p class="">
-					Titre
-				</p>
+	{% for element in content %}
+		<div class="item">
+			<div class="item-image">
+				<a href="#" class="image-cadre">
+					<img src="{{ element.picture.url }}" class="round-image-borders">
+				</a>
 			</div>
-			<a href="#" class="a-content">
-				<div class="between-detail-elements"></div>
-				<div class="item-description">
+
+			<div class="empty-frame"></div>
+			<div class="item-content">
+				<div class="item-title">
 					<p class="">
-						Ceci est une description!
+						{{ element.get_name }}
 					</p>
 				</div>
-			</a>
-			<div class="between-detail-elements"></div>
-			<div class="item-appre">
-				<div class="like-comment">
-					<div class="like">
-						<a href="#" class="appre-image" onclick=logInFirst()>
-							<img src="{% static 'visitor/images/gear-fill.svg' %}">
-						</a>
-						<p class="number">1K</p>
+				<a href="#" class="a-content">
+					<div class="between-detail-elements"></div>
+					<div class="item-description">
+						<p class="">
+							{% if element.get_description != "unknown description" %}{{ element.get_description }}{% else %}No description available{% endif %}
+							
+						</p>
 					</div>
-					<div class="between-like-comment"></div>
-					<div class="comment">
-						<a href="#" onclick=logInFirst() class="appre-image">
-							<img src="{% static 'visitor/images/gear-fill.svg' %}">
-						</a>
-						<p class="number">20</p>
+				</a>
+				<div class="between-detail-elements"></div>
+				{% if element.get_unit is None %}	<div class="item-appre">
+					<div class="like-comment">
+						<div class="like">
+							<a href="#" class="appre-image" onclick="alert('You just liked!')">
+								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+							</a>
+							<p class="number">1K</p>
+						</div>
+						<div class="between-like-comment"></div>
+						<div class="comment">
+							<a href="#" class="appre-image">
+								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+							</a>
+							<p class="number">20</p>
+						</div>
 					</div>
-				</div>
-				<div class="comment-bar">
-					<div class="comment-input">
-						<form name="comment" action="#" method="get">
-							<input type="text" class="input-zone" name="keyword" placeholder="Write something" onclick=logInFirst() required>
-						</form>
+					<div class="comment-bar">
+						<div class="comment-input">
+							<form name="comment" action="#" method="get">
+								<input type="text" class="input-zone" name="keyword" placeholder="Write something" required>
+							</form>
+						</div>
+						<div class="send-comment">
+							<a href="#" class="appre-image">
+								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+							</a>
+						</div>
 					</div>
-					<div class="send-comment">
-						<a href="#" class="appre-image" onclick=logInFirst()>
-							<img src="{% static 'visitor/images/gear-fill.svg' %}">
-						</a>
-					</div>
-				</div>
+				</div>{% endif %}
 			</div>
+			
+
 		</div>
 		
 
-	</div>
-	{% endfor %}
-
+		{% endfor %}
 </div>
-
 {% endblock %}
