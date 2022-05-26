@@ -1,4 +1,5 @@
 import pickle
+from django.db import transaction
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -18,7 +19,7 @@ def index(request):
 #################################################################################################################################################################
 ################################################################### Account #####################################################################################
 #################################################################################################################################################################
-
+@transaction.atomic
 def register(request):
     '''
         Takes user's informations and create a user object (an account)
@@ -83,33 +84,11 @@ def all_meals(request):
     return render(request, 'visitor/meals.html', {'meals':meals})
 
 
-
-def my_meals(request):
-    '''
-        Display Meal objects managed by the current user
-    '''
-    meals = get_list_or_404(Meal, operator=request.user)
-
-    return render(request, 'visitor/meals.html', {'meals':meals})
-
-
-
-
 def all_menus(request):
     '''
         Display all available Menu objects in the database
     '''
     menus = get_list_or_404(Menu)
-
-    return render(request, 'visitor/menus.html', {'menus':menus})
-
-
-
-def my_menus(request):
-    '''
-        Display Menu objects managed by the current user
-    '''
-    meals = get_list_or_404(Menu, operator=request.user)
 
     return render(request, 'visitor/menus.html', {'menus':menus})
 
@@ -132,13 +111,23 @@ def meal_detail(request, id):
     return render(request, 'visitor/meal_detail.html', {'meal':meal})
 
 
-def meanu_detail(request, id):
+def menu_detail(request, id):
     '''
         Display details about a Menu object
     '''
     menu = get_object_or_404(Menu, id=id)
     
     return render(request, 'visitor/menu_detail.html', {'menu':menu})
+
+
+
+
+
+#################################################################################################################################################################
+################################################################## Interact with content ########################################################################
+#################################################################################################################################################################
+
+@transaction.atomic
 
 
 

@@ -10,7 +10,7 @@
 	</div>
 
 
-	<form id="form" action="{% url 'visitor:registration' %}" method="POST" onSubmit=checkPwd()>
+	<form id="form" name='form' action="{% url 'visitor:registration' %}" method="POST" onSubmit=checkAll('form')>
 
         {% csrf_token %}
 
@@ -42,7 +42,8 @@
         <div id="errorPwdConf">{{ error.password }}</div>
 
         <div class="item-connexion"style="padding-top:0%;">
-			<input type="submit" value="Sign up">
+			<a id='hideConf' href="#" onclick=checkAll('form') style="height:100%; padding: 3% 0% 0% 5%">Sign up</a>
+			<!--input type="submit" value="Sign up"-->
 		</div>
 
 	</form>

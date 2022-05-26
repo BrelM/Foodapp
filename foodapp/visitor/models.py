@@ -30,6 +30,7 @@ class Ressource(models.Model):
         abstract = True
 
     name = models.CharField(max_length=30, null=False, default='unknown ressource')
+    creation_date = models.DateField(auto_now=True)
     fat = models.FloatField(default=0)
     proteins = models.FloatField(default=0)
     fiber = models.FloatField(default=0)
@@ -40,38 +41,66 @@ class Ressource(models.Model):
     kcal = models.FloatField(default=0)
     #picture = models.ImageField()
 
-
-    def get_name(self):
+    # Getters
+    def get_name(self) -> str:
         return self.name
+    def get_creation_date(self) -> models.DateField:
+        return self.creation_date
 
+    def get_fat(self) -> float:
+        return self.fat
+
+    def get_proteins(self) -> float:
+        return self.proteins
+
+    def get_fiber(self) -> float:
+        return self.fiber
+
+    def get_carbohydrates(self) -> float:
+        return self.carbohydrates
+
+    def get_water(self) -> float:
+        return self.water
+
+    def get_vitamins(self) -> list:
+        return self.vitamins
+
+    def get_minerals(self) -> list:
+        return self.minerals
+
+    def get_kcal(self) -> float:
+        return self.kcal
+    # Setters
     def set_name(self, name):
         self.name = name
 
-    def get_fat(self):
-        return self.fat
+    def set_attributes(self, **kwargs):
+        if kwargs['name']:
+            self.name = kwargs['name']
+        if kwargs['creation_date']:
+            self.creation_date = kwargs['creation_date']
+        if kwargs['fat']:
+            self.fat = kwargs['fat']
+        if kwargs['proteins']:
+            self.proteins = kwargs['proteins']
+        if kwargs['carbohydrates']:
+            self.carbohydrates = kwargs['carbohydrates']
+        if kwargs['kcal']:
+            self.kcal = kwargs['kcal']
+        if kwargs['fiber']:
+            self.fiber = kwargs['fiber']
+        if kwargs['water']:
+            self.water = kwargs['water']
+        if kwargs['vitamins']:
+            self.vitamins = kwargs['vitamins']
+        if kwargs['minerals']:
+            self.minerals = kwargs['minerals']
+    
+    def __str__(self) -> str:
+        return self.__repr__()
 
-    def get_proteins(self):
-        return self.proteins
-
-    def get_fiber(self):
-        return self.fiber
-
-    def get_carbohydrates(self):
-        return self.carbohydrates
-
-    def get_water(self):
-        return self.water
-
-    def get_vitamins(self):
-        return self.vitamins
-
-    def get_minerals(self):
-        return self.minerals
-
-    def get_kcal(self):
-        return self.kcal
-
-
+    def __repr__(self) -> str:
+        return "Food : "+self.name
 
 class Food(Ressource):
     '''
@@ -79,7 +108,7 @@ class Food(Ressource):
     '''
     unit = models.CharField(max_length=50, null=False, default=' unit(s) of ')
 
-    def getUnit(self):
+    def getUnit(self) -> str:
         return self.unit
 
 
@@ -97,7 +126,7 @@ class Meal(Ressource):
     likers = models.ManyToManyField(Operator, related_name='likedMeals', through='MealAppreciation')
     commentors = models.ManyToManyField(Operator, related_name='commentedMeals', through='MealCommenting')
 
-    def update_info(self):
+    def update_infos(self):
         '''
             Update nutrient attributes values taking in charge the nutrient attributes values of the composing Food objects
         '''
@@ -125,11 +154,17 @@ class Menu(models.Model):
     '''
     name = models.CharField(max_length=20, null=False, default='random menu')
     description = models.CharField(max_length=50, blank=True)
-
     meals = models.ManyToManyField(Meal, related_name='+', blank=False)
     operator = models.ForeignKey(Operator, related_name='menus', blank=True, null=True, on_delete=models.CASCADE)
     likers = models.ManyToManyField(Operator, related_name='likedMenus', through='MenuAppreciation')
     commentors = models.ManyToManyField(Operator, related_name='commentedMenus', through='MenuCommenting')
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "Food : "+self.name
+
 
 
 
