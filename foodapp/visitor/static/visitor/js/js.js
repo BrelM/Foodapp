@@ -39,24 +39,6 @@ function logInFirst()
 }
 
 /*
-function checkPwd()
-{
-	form = document.getElementById('form');
-
-	if(form.password.value != form.password_conf.value || form.password.value == '')
-	{
-		form.password_conf.value = "";
-		form.password_conf.focus();
-		document.getElementById('errorPwdConf').innerHTML = "Passwords does not seem to be the same.<br>Please re-enter your password properly.";
-		document.getElementById('errorPwdConf').style.color = 'red';
-		document.getElementById('errorPwdConf').style.textAlign = 'center';
-		return false;
-	}
-	else
-		form.submit();
-}*/
-
-
 //This function checks if informations are correct before submiting the registration form.
 function checkAll(form)
 {
@@ -71,7 +53,7 @@ function checkAll(form)
 	if(!checkPwd(form))
 		isCorrect = false;
 	if(!checkPwdConf(form))
-		isCorrect = true;
+		isCorrect = false;
 
 	if(isCorrect)
 		form.submit();
@@ -110,11 +92,11 @@ function checkMail(Form)
 function checkPwd(Form)
 {
 	const pwd1 = /[A-Z]+/;
-	const pwd2 = /[a-zA-Z0-9,.;?]{6,}/;
+	const pwd2 = /[a-zA-Z0-9,.;?]{4,}/;
 	//const pwd3 = /[.,;?]+/;
-	if(!(pwd1.test(Form.password.value) && pwd2.test(Form.password.value)/* && pwd3.test(Form.password.value)*/))
+	if(!(pwd1.test(Form.password.value) && pwd2.test(Form.password.value)/* && pwd3.test(Form.password.value)))
 	{
-		document.getElementById('errorPwd').innerHTML = "Password does not seem to be correct.<br>Your password must contain at least six characters, an uppercase letter and a special character.";
+		document.getElementById('errorPwd').innerHTML = "Password does not seem to be correct.<br>Your password must contain at least four characters, an uppercase letter.";
 		document.getElementById('errorPwd').style.color = 'red';
 		document.getElementById('errorPwd').style.textAlign = 'center';
 		Form.password.focus();
@@ -142,3 +124,4 @@ function checkPwdConf(Form)
 		return true;
 	}
 }
+*/

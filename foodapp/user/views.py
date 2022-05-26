@@ -11,7 +11,7 @@ def home_page(request):
     '''
         Open the current user's home page
     '''
-    content = get_random_content(request.user)
+    content = get_random_content()
 
     return render(request, 'user/home_page.html', {'content': content})
 
@@ -68,7 +68,7 @@ def my_menus(request):
     '''
         Display Menu objects managed by the current user
     '''
-    meals = get_list_or_404(Menu, operator=request.user)
+    menus = get_list_or_404(Menu, operator=request.user)
 
     return render(request, 'user/menus.html', {'menus':menus})
 

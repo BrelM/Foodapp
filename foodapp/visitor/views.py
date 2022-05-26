@@ -28,13 +28,13 @@ def register(request):
         return render(request, 'visitor/registration.html', {})
     else:
         user = Operator.objects.create_user(
-                username=request.POST.get('name'), 
+                username=request.POST.get('username'), 
                 password=request.POST.get('password'),
-                mail=request.POST.get('mail'),
+                email=request.POST.get('mail'),
                 is_active=True
             )
 
-        return HttpResponseRedirect('visitor:log_in')
+        return HttpResponseRedirect('/visitor/log_in/')
 
 
 
@@ -52,7 +52,11 @@ def log_in(request):
             user = auth.authenticate(username=username, password=password)
             auth.login(request, user)
             
-            if user: return HttpResponseRedirect('/user/home_page/')
+            if user: 
+                if user.is_superuser:
+                    return HttpResponseRedirect('/admin/')
+                else:
+                    return HttpResponseRedirect('/user/home_page/')
             else: raise ValueError()
         except:
             return render(request, 'visitor/log_in.html', {'error': "Ce compte semble ne pas exister."})

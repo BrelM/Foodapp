@@ -3,13 +3,17 @@ from user.models import Operator
 
 
 
-VITAMINS = (
-        ('A', 'A'),
+class Vitamins(models.Model):
+    name= models.CharField(max_length=2, null=True)
+'''        ('A', 'A'),
         ('B', 'B'),
         ('C', 'C'),
         ('D','D'),
         ('E', 'E')
-    )
+'''    
+class Minerals(models.Model):
+    name= models.CharField(max_length=2, null=True)
+
 MINERALS = [
     ('sodium', 'sodium'),
     ('calcium', 'calcium'),
@@ -36,10 +40,11 @@ class Ressource(models.Model):
     fiber = models.FloatField(default=0)
     carbohydrates = models.FloatField(default=0)
     water = models.FloatField(default=0)
-    vitamins = models.CharField(choices=VITAMINS, max_length=3, null=True)
-    minerals = models.CharField(choices=MINERALS, max_length=20, null=True)
     kcal = models.FloatField(default=0)
-    #picture = models.ImageField()
+    picture = models.ImageField(null=True)
+    
+    vitamins = models.ManyToManyField(Vitamins, related_name='+')
+    minerals = models.ManyToManyField(Minerals, related_name='+')
 
     # Getters
     def get_name(self) -> str:
@@ -153,6 +158,7 @@ class Menu(models.Model):
         A menu might contain Meal objects
     '''
     name = models.CharField(max_length=20, null=False, default='random menu')
+    creation_date = models.DateField(auto_now=True)
     description = models.CharField(max_length=50, blank=True)
     meals = models.ManyToManyField(Meal, related_name='+', blank=False)
     operator = models.ForeignKey(Operator, related_name='menus', blank=True, null=True, on_delete=models.CASCADE)
