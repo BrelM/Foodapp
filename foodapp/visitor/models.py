@@ -3,7 +3,7 @@ from user.models import Operator
 
 
 
-class Vitamins(models.Model):
+class Vitamin(models.Model):
     name= models.CharField(max_length=2, null=True)
 '''        ('A', 'A'),
         ('B', 'B'),
@@ -11,7 +11,7 @@ class Vitamins(models.Model):
         ('D','D'),
         ('E', 'E')
 '''    
-class Minerals(models.Model):
+class Mineral(models.Model):
     name= models.CharField(max_length=2, null=True)
 
 MINERALS = [
@@ -43,8 +43,8 @@ class Ressource(models.Model):
     kcal = models.FloatField(default=0)
     picture = models.ImageField(null=True)
     
-    vitamins = models.ManyToManyField(Vitamins, related_name='+')
-    minerals = models.ManyToManyField(Minerals, related_name='+')
+    vitamins = models.ManyToManyField(Vitamin, related_name='+')
+    minerals = models.ManyToManyField(Mineral, related_name='+')
 
     # Getters
     def get_name(self) -> str:
