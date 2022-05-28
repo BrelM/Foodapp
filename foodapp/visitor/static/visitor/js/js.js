@@ -88,40 +88,25 @@ function commentMeal(id)
 	nb_comment = document.getElementById('nb_comment');
 	id = document.getElementById('id').value;
 
-	$("#comment-form").submit(function (e) {
-		// preventing default actions
-		e.preventDefault();
-		// serialize the data for sending the form data.
-		var serializedData = $(this).serialize();
-		// Ajax Call
-		$.ajax({
-			type: 'POST',
-			url: "{% url 'user:comment_content' id="||id||" tp='meal' %}",
-			data: serializedData,
-			// handle a successful response
-			success: function (response) {
-				// On successful, clear all form data
-				$("#comment-form").trigger('reset');
+	xhttp = new XMLHttpRequest();
 	
-				// Display new participant to table
-				
-				$("#nb_comment tbody").prepend(
-				   `${response||""}`
-				)
-			},
-			error: function (response) {
-				// alert non successful response
-				alert(response["responseJSON"]["error"]);
-			}
-		})
-	})
-	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			alert('Commentaire enregistré avec succès!');
+			document.getElementById('comment').value = "";				
+			nb_comment.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/comment_content/'+id+'/meal/'+document.getElementById('comment').value+'/', true);
+	xhttp.send();
 }
 
 
 function commentMenu(id)
 {
-	nb_like = document.getElementById('nb_comment');
+	nb_comment = document.getElementById('nb_comment');
 	id = document.getElementById('id').value;
 
 	xhttp = new XMLHttpRequest();
@@ -129,17 +114,22 @@ function commentMenu(id)
 	xhttp.onreadystatechange = function (){
 		
 		if(this.readyState==4 && this.status==200){
-			document.getElementById('comment').innerHTML = "";				
-			nb_like.innerHTML = this.responseText;
+			alert('Commentaire enregistré avec succès!');
+			document.getElementById('comment').value = "";				
+			nb_comment.innerHTML = this.responseText;
 		}
 	}
 
-	xhttp.open('POST', '/user/comment_content/'+id+'/menu/', true);
+	xhttp.open('GET', '/user/comment_content/'+id+'/menu/'+document.getElementById('comment').value+'/', true);
 	xhttp.send();
 }
 
 
 
+function logInFirst(ea,edd)
+{
+	alert("You have to log in first!");
+}
 
 
 function submitForm(form)

@@ -29,7 +29,7 @@ urlpatterns = [
 
     #Interact with content
     path('like_content/<int:id>/<str:tp>/', views.like_content, name='like_content'),
-    path('comment_content/<int:id>/<str:tp>/', views.comment_content, name='comment_content'),
+    path('comment_content/<int:id>/<str:tp>/<str:comment>/', views.comment_content, name='comment_content'),
 
     #search
     path('search/<str:filter>/<int:order>', views.search, name='search'),

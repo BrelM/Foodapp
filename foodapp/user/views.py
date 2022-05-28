@@ -171,21 +171,21 @@ def like_content(request, id:int, tp:str):
 
 @login_required
 @transaction.atomic
-def comment_content(request, id:int, tp:str):
+def comment_content(request, id:int, tp:str, comment:str):
     '''
         Add a comment to a meal or a menu
     '''
 
     if tp=='meal':        
-        # Add a like appreciation to a meal
+        # Add a comment on a meal
         meal=Meal.objects.get(id=id)
-        MealCommenting.objects.create(appreciator=request.user, meal=meal, content=request.POST.get('comment'))
+        MealCommenting.objects.create(commentor=request.user, meal=meal, content=comment)
         
         return HttpResponse(str(meal.count_commentors()))
     else:
-        # Add a like appreciation to a menu
+        # Add a comment on a menu
         menu=Menu.objects.get(id=id)
-        MenuCommenting.objects.create(appreciator=request.user, meal=menu, content=request.POST.get('comment'))
+        MenuCommenting.objects.create(commentor=request.user, meal=menu, content=comment)
 
         return HttpResponse(str(menu.count_commentors()))
 

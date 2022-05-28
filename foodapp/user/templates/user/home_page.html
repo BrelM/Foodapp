@@ -75,8 +75,13 @@
 					</div>
 					<div class="comment-bar">
 						<div class="comment-input">
-							<form name="comment" id="comment-form" action="#" method="POST">
-								{% csrf_token %}
+							
+							{% if element.picture %}
+								<form name="comment" action='#' onsubmit=commentMeal('id') id="comment-form"  method="GET">
+							{% else %}
+								<form name="comment" action='#' onsubmit=commentMenu('id') id="comment-form"  method="GET">
+							{% endif %}
+
 								<input type="text" class="input-zone" name="comment" id="comment" placeholder="Write something" required>
 							</form>
 						</div>
