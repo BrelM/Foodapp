@@ -33,9 +33,118 @@ function unhidePassword(pwd){
 }
 
 
-function logInFirst()
+function likeMeal(id)
 {
-	alert("You have to log in first!");
+	nb_like = document.getElementById('nb_like');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			if(parseInt(nb_like.innerHTML) > this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+			if(parseInt(nb_like.innerHTML) < this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				
+			nb_like.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/like_content/'+id+'/meal/', true);
+	xhttp.send();
+}
+
+
+function likeMenu(id)
+{
+	nb_like = document.getElementById('nb_like');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			if(parseInt(nb_like.innerHTML) > this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+			if(parseInt(nb_like.innerHTML) < this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				
+			nb_like.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/like_content/'+id+'/menu/', true);
+	xhttp.send();
+}
+
+
+
+
+function commentMeal(id)
+{
+	nb_comment = document.getElementById('nb_comment');
+	id = document.getElementById('id').value;
+
+	$("#comment-form").submit(function (e) {
+		// preventing default actions
+		e.preventDefault();
+		// serialize the data for sending the form data.
+		var serializedData = $(this).serialize();
+		// Ajax Call
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'user:comment_content' id="||id||" tp='meal' %}",
+			data: serializedData,
+			// handle a successful response
+			success: function (response) {
+				// On successful, clear all form data
+				$("#comment-form").trigger('reset');
+	
+				// Display new participant to table
+				
+				$("#nb_comment tbody").prepend(
+				   `${response||""}`
+				)
+			},
+			error: function (response) {
+				// alert non successful response
+				alert(response["responseJSON"]["error"]);
+			}
+		})
+	})
+	
+}
+
+
+function commentMenu(id)
+{
+	nb_like = document.getElementById('nb_comment');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			document.getElementById('comment').innerHTML = "";				
+			nb_like.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('POST', '/user/comment_content/'+id+'/menu/', true);
+	xhttp.send();
+}
+
+
+
+
+
+function submitForm(form)
+{
+	document.getElementById('search').submit();
 }
 
 /*
@@ -112,7 +221,7 @@ function checkPwdConf(Form)
 	if(checkPwd(Form))
 	{
 		if(Form.password.value != Form.password_conf.value)
-		{
+		
 			Form.password_conf.value = "";
 			Form.password_conf.focus();
 			document.getElementById('errorPwdConf').innerHTML = "Passwords does not seem to be the same.<br>Please re-enter your password properly.";
@@ -124,4 +233,4 @@ function checkPwdConf(Form)
 		return true;
 	}
 }
-*/
+*/y

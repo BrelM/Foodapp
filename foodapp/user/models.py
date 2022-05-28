@@ -14,7 +14,7 @@ class Operator(AbstractUser):
     def get_mail(self) -> str:
         return self.email
 
-    def setInfos(self, username:str=None, mail:str=None):
+    def set_infos(self, username:str=None, mail:str=None):
         if username:
             self.username = username
         if mail:

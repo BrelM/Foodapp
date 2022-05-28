@@ -14,7 +14,7 @@ class Vitamin(models.Model):
         return "Vitamin : "+self.name
 
 class Mineral(models.Model):
-    name= models.CharField(max_length=2, null=True)
+    name= models.CharField(max_length=10, null=True)
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -154,6 +154,20 @@ class Meal(Ressource):
     
     def set_name(self, name:str):
         self.name = name
+    
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "Meal : "+self.name
+    
+
+    def count_likers(self) -> int:
+        return self.likers.count()
+    
+
+    def count_commentors(self) -> int:
+        return self.commentors.count()
 
 
 
@@ -181,8 +195,16 @@ class Menu(models.Model):
     
     def get_creation_date(self) -> models.DateField:
         return self.creation_date
+    
+    def count_likers(self) -> int:
+        return self.likers.count()
+    
 
-        # Setters
+    def count_commentors(self) -> int:
+        return self.commentors.count()
+
+        
+    # Setters
     def set_name(self, name):
         self.name = name
     
@@ -205,7 +227,7 @@ class MealAppreciation(models.Model):
     '''
         Implementation of the appreciation many to many relationship between Operator model and Meal model
     '''
-    appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE)
+    appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE, related_name='mealAppreciations')
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
    
     value = models.BooleanField(default=True)
@@ -229,7 +251,7 @@ class MenuAppreciation(models.Model):
     '''
         Implementation of the appreciation many to many relationship between Operator model and Menu model
     '''
-    appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE)
+    appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE, related_name='menuAppreciations')
     meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
    
     value = models.BooleanField(default=True)

@@ -1,0 +1,30 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="main-connexion">
+	<div id="sp">
+		Modify your informations
+	</div>
+	<form id="form" action="{% url 'user:modify_infos' %}" method="POST">
+		{% csrf_token %}
+		{{ error }}
+		<div class="item-connexion">
+			<img src="{% static 'visitor/images/file-person.svg' %}">
+			<input type="text" name="username" class="input-login" placeholder="Username" value="{{ content.username }}">
+		</div>
+		<div class="item-connexion">
+			<img src="{% static 'visitor/images/file-person.svg' %}">
+			<input type="text" name="mail" class="input-login" placeholder="E-mail" value="{{ content.email }}">
+        </div>
+
+		<div class="item-connexion">
+			<input type="submit" value="Save changes">
+		</div>
+
+	</form>
+</div>
+
+{% endblock content %}

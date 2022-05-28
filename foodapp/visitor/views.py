@@ -10,6 +10,19 @@ from visitor import requirement
 
 folder = 'visitor'
 
+sorting_functions = {
+    'type': requirement.sort_by_type,
+    'name': requirement.sort_by_name,
+    'fat': requirement.sort_by_fat,
+    'proteins': requirement.sort_by_proteins,
+    'date': requirement.sort_by_date,
+    'carbohydrates': requirement.sort_by_carbohydrates,
+    'fiber': requirement.sort_by_fiber,
+    'water': requirement.sort_by_water,
+    'kcal': requirement.sort_by_kcal
+}
+
+
 # Create your views here.
 def index(request):
     content = requirement.get_random_content()
@@ -127,14 +140,6 @@ def menu_detail(request, id):
 
 
 #################################################################################################################################################################
-################################################################## Interact with content ########################################################################
-#################################################################################################################################################################
-
-@transaction.atomic
-
-
-
-#################################################################################################################################################################
 ################################################################### Searching ###################################################################################
 #################################################################################################################################################################
 
@@ -148,17 +153,21 @@ def search(request, filter, order):
         else:
             with open('results', 'rb') as results_file:
                 results_raw = pickle.Unpickler(results_file).load()
-                results = results_raw['results']
-                filter = results_raw['filter']
-                order = results_raw['order']
-
+                keyword = pickle.Unpickler(results_file).load()
                 # Calls for sorting functions in requirement.py
-                requirement
+                results = sorting_functions[filter](results_raw, order)
 
-            context = {
-                'results': results,
-            }
-            return render(request, request, folder + '/search.html', context)
+        context = {
+            'content': results,
+            'keyword': keyword,
+        }
+        return render(request, folder + '/search.html', context)
     else:
+        key = request.POST.get('keyword')
+        results = list(Food.objects.filter(name__icontains=key)) + list(Meal.objects.filter(name__icontains=key)) + list(Menu.objects.filter(name__icontains=key))
+        
         with open('results', 'wb') as results_file:
-            pass
+            pickle.Pickler(results_file).dump(results)
+            pickle.Pickler(results_file).dump(key)
+            
+        return render(request, folder + '/search.html', {'content' : results, 'keyword': key})

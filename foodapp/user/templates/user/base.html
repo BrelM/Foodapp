@@ -20,12 +20,13 @@
 		</div>
 		<div class="between">
 			<div class="icon searchbar">
-				<form name="search" action="#" method="get">
-					<input type="text" name="keyword" maxlength="15" required>
+				<form id="search" action="{% url 'user:search' filter='none' order=0 %}" method="POST">
+					{% csrf_token %}
+					<input type="text" name="keyword" maxlength="15" value="{{ keyword }}" required>
 				</form>
 			</div>
 			<div class="icon">
-				<a href="#" class="image">
+				<a href="#" class="image" onclick=submitForm('search')>
 					<img src="{% static 'visitor/images/glass.png' %}">
 				</a>
 			</div>
@@ -40,7 +41,7 @@
 					<img src="{% static 'visitor/images/file-person.svg' %}">
 				</a>
 				<div class="user">
-					<a href="">account settings</a>
+					<a href="{% url 'user:modify_infos' %}">account settings</a>
 					<a href="{% url 'user:log_out' %}">log out</a>
 				</div>
 			</div>

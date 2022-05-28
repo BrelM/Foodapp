@@ -6,8 +6,18 @@
 	{% for element in content %}
 		<div class="item">
 			<div class="item-image">
-				<a href="#" class="image-cadre">
-					<img src="{{ element.picture.url }}" class="round-image-borders">
+					{% if element.get_unit %}
+						<a href="{% url 'user:food_detail' id=element.id %}" class="image-cadre">
+						<img src="{{ element.picture.url }}" class="round-image-borders">
+					{% else %}
+						{% if element.picture %}
+							<a href="{% url 'user:meal_detail' id=element.id %}" class="image-cadre">
+							<img src="{{ element.picture.url }}" class="round-image-borders">
+						{% else %}
+							<a href="{% url 'user:menu_detail' id=element.id %}" class="image-cadre">
+							Pas d'image disponible
+						{% endif %}
+					{% endif %}
 				</a>
 			</div>
 
@@ -18,7 +28,16 @@
 						{{ element.get_name }}
 					</p>
 				</div>
-				<a href="#" class="a-content">
+
+				{% if element.get_unit %}
+					<a href="{% url 'user:food_detail' id=element.id %}" class="a-content">
+				{% else %}
+					{% if element.picture %}
+						<a href="{% url 'user:meal_detail' id=element.id %}" class="a-content">
+					{% else %}
+						<a href="{% url 'user:menu_detail' id=element.id %}" class="a-content">
+					{% endif %}
+				{% endif %}
 					<div class="between-detail-elements"></div>
 					<div class="item-description">
 						<p class="">
@@ -28,35 +47,52 @@
 					</div>
 				</a>
 				<div class="between-detail-elements"></div>
-				{% if element.get_unit is None %}	<div class="item-appre">
+				{% if element.get_unit is None %}
+				<div class="item-appre">
 					<div class="like-comment">
 						<div class="like">
-							<a href="#" class="appre-image" onclick="alert('You just liked!')">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+							{% if element.picture %}
+								<a href="#" onclick=likeMeal('id') class="appre-image">
+							{% else %}
+								<a href="#" onclick=likeMenu('id') class="appre-image">
+							{% endif %}
+							{% if user in element.likers.all %}
+								<img id="like_image" src="{% static 'visitor/images/liked.png' %}">
+							{% else %}
+								<img id="like_image" src="{% static 'visitor/images/like.png' %}">
+							{% endif %}
+								
 							</a>
-							<p class="number">1K</p>
+							<p id='nb_like' class="number">{{ element.count_likers }}</p>
 						</div>
 						<div class="between-like-comment"></div>
-						<div class="comment">
+						<div class="comment">					
 							<a href="#" class="appre-image">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+								<img src="{% static 'visitor/images/comment.png' %}">
 							</a>
-							<p class="number">20</p>
+							<p id='nb_comment' class="number">{{ element.count_commentors }}</p>
 						</div>
 					</div>
 					<div class="comment-bar">
 						<div class="comment-input">
-							<form name="comment" action="#" method="get">
-								<input type="text" class="input-zone" name="keyword" placeholder="Write something" required>
+							<form name="comment" id="comment-form" action="#" method="POST">
+								{% csrf_token %}
+								<input type="text" class="input-zone" name="comment" id="comment" placeholder="Write something" required>
 							</form>
 						</div>
 						<div class="send-comment">
-							<a href="#" class="appre-image">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
+							<input id='id' type='1' value="{{ element.id }}" hidden>
+							{% if element.picture %}
+								<a href="#" onclick=commentMeal('id') class="appre-image">
+							{% else %}
+								<a href="#" onclick=commentMenu('id') class="appre-image">
+							{% endif %}
+								<img src="{% static 'visitor/images/send.png' %}">
 							</a>
 						</div>
 					</div>
-				</div>{% endif %}
+				</div>
+				{% endif %}
 			</div>
 			
 

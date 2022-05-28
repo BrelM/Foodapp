@@ -25,7 +25,7 @@ def get_random_content() -> list:
 
 
 
-def sort_by_type(result:list=[]) -> dict:
+def sort_by_type(result:list=[], reverse:int=0) -> dict:
     '''Sort a list of Food, Meal or Menu objects (by types)'''
     if result != []:
         results = {'Food': [], 'Meal' : [], 'Menus' : []}
@@ -40,7 +40,7 @@ def sort_by_type(result:list=[]) -> dict:
 
 
 
-def sort_by_name(result:list=[], reverse:bool=False) -> list:
+def sort_by_name(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by names) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -56,7 +56,7 @@ def sort_by_name(result:list=[], reverse:bool=False) -> list:
     return list(result)
 
 
-def sort_by_date(result:list=[], reverse:bool=False) -> list:
+def sort_by_date(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by dates) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -71,7 +71,7 @@ def sort_by_date(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_fat(result:list=[], reverse:bool=False) -> list:
+def sort_by_fat(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by fat) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -86,7 +86,7 @@ def sort_by_fat(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_proteins(result:list=[], reverse:bool=False) -> list:
+def sort_by_proteins(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by proteins) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -101,7 +101,7 @@ def sort_by_proteins(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_carbohydrates(result:list=[], reverse:bool=False) -> list:
+def sort_by_carbohydrates(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by carbohydrates) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -116,7 +116,7 @@ def sort_by_carbohydrates(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_fiber(result:list=[], reverse:bool=False) -> list:
+def sort_by_fiber(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by fiber) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -131,7 +131,7 @@ def sort_by_fiber(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_water(result:list=[], reverse:bool=False) -> list:
+def sort_by_water(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by water) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):
@@ -146,7 +146,7 @@ def sort_by_water(result:list=[], reverse:bool=False) -> list:
             result.reverse()
     return list(result)
 
-def sort_by_kcal(result:list=[], reverse:bool=False) -> list:
+def sort_by_kcal(result:list=[], reverse:int=0) -> list:
     '''Sort a list of Food, Meal or Menu objects (by kcal) using an insert sort'''
     if result != []:
         for i in range(1, len(result)):

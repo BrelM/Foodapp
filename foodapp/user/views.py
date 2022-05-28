@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.db import transaction
 from visitor.models import *
+from visitor.views import sorting_functions
 
 import pickle
 
@@ -28,6 +29,24 @@ def log_out(request):
     auth.logout(request)
     return HttpResponseRedirect('/visitor/log_in')
 
+
+@login_required
+@transaction.atomic
+def modify_infos(request):
+    '''
+        Enable the current user (logged in) to modify his/her account informations
+    '''
+    if request.method=='GET':
+        return render(request, 'user/modify_infos.html', {'content':request.user})
+    else:
+        user = request.user
+        user.set_infos(username=request.POST.get('username'), mail=request.POST.get('mail'))
+        user.save()
+
+        return HttpResponseRedirect('/user/home_page')
+
+
+
 #################################################################################################################################################################
 ################################################################### Display content #############################################################################
 #################################################################################################################################################################
@@ -39,7 +58,7 @@ def all_foods(request):
     '''
     foods = get_list_or_404(Food)
 
-    return render(request, folder + '/foods.html', {'foods':foods})
+    return render(request, folder + '/foods.html', {'content':foods})
 
 
 
@@ -50,7 +69,7 @@ def all_meals(request):
     '''
     meals = get_list_or_404(Meal)
 
-    return render(request, folder + '/meals.html', {'meals':meals})
+    return render(request, folder + '/meals.html', {'content':meals})
 
 
 
@@ -61,7 +80,7 @@ def my_meals(request):
     '''
     meals = get_list_or_404(Meal, operator=request.user)
 
-    return render(request, folder + '/meals.html', {'meals':meals})
+    return render(request, folder + '/meals.html', {'content':meals})
 
 
 
@@ -73,7 +92,7 @@ def all_menus(request):
     '''
     menus = get_list_or_404(Menu)
 
-    return render(request, folder + '/menus.html', {'menus':menus})
+    return render(request, folder + '/menus.html', {'content':menus})
 
 
 
@@ -84,7 +103,7 @@ def my_menus(request):
     '''
     menus = get_list_or_404(Menu, operator=request.user)
 
-    return render(request, folder + '/menus.html', {'menus':menus})
+    return render(request, folder + '/menus.html', {'content':menus})
 
 
 def food_detail(request, id):
@@ -93,7 +112,7 @@ def food_detail(request, id):
     '''
     food = get_object_or_404(Food, id=id)
     
-    return render(request, folder + '/food_detail.html', {'food':food})
+    return render(request, folder + '/detail.html', {'content':food})
 
 
 def meal_detail(request, id):
@@ -102,7 +121,7 @@ def meal_detail(request, id):
     '''
     meal = get_object_or_404(Meal, id=id)
     
-    return render(request, folder + '/meal_detail.html', {'meal':meal})
+    return render(request, folder + '/detail.html', {'content':meal})
 
 
 def menu_detail(request, id):
@@ -111,8 +130,7 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, folder + '/menu_detail.html', {'menu':menu})
-
+    return render(request, folder + '/menu_detail.html', {'content':menu})
 
 
 
@@ -123,34 +141,205 @@ def menu_detail(request, id):
 
 @login_required
 @transaction.atomic
-def like_meal(request, id):
+def like_content(request, id:int, tp:str):
     '''
-        Add a like appreciation to a meal
+        Add a like appreciation to a meal or a menu
     '''
-    
-    if request.GET.get('value'):
-        MealAppreciation.objects.create(appreciator=request.user, meal=Menu.objects.get(id=id))
+
+    if tp=='meal':
+        # Add a like appreciation to a meal
+        meal=Meal.objects.get(id=id)
+        try:
+            app=MealAppreciation.objects.get(appreciator=request.user, meal=meal)
+            app.delete()
+        except:
+            MealAppreciation.objects.create(appreciator=request.user, meal=meal)
+        
+        return HttpResponse(str(meal.count_likers()))
     else:
-        MealAppreciation.objects.create(appreciator=request.user, meal=Menu.objects.get(id=id), value=False)
+        # Add a like appreciation to a menu
+        menu=Menu.objects.get(id=id)
+        try:
+            app=MealAppreciation.objects.get(appreciator=request.user, meal=menu)
+            app.delete()
+        except:
+            MealAppreciation.objects.create(appreciator=request.user, meal=menu)
+
+        return HttpResponse(str(meal.count_likers()))
 
 
 
 @login_required
 @transaction.atomic
-def like_menu(request, id):
+def comment_content(request, id:int, tp:str):
     '''
-        Add a like appreciation to a menu
+        Add a comment to a meal or a menu
     '''
-    if request.GET.get('value'):
-        MenuAppreciation.objects.create(appreciator=request.user, menu=Menu.objects.get(id=id))
+
+    if tp=='meal':        
+        # Add a like appreciation to a meal
+        meal=Meal.objects.get(id=id)
+        MealCommenting.objects.create(appreciator=request.user, meal=meal, content=request.POST.get('comment'))
+        
+        return HttpResponse(str(meal.count_commentors()))
     else:
-        MenuAppreciation.objects.create(appreciator=request.user, menu=Menu.objects.get(id=id), value=False)
+        # Add a like appreciation to a menu
+        menu=Menu.objects.get(id=id)
+        MenuCommenting.objects.create(appreciator=request.user, meal=menu, content=request.POST.get('comment'))
+
+        return HttpResponse(str(menu.count_commentors()))
+
+
+
+
+#################################################################################################################################################################
+################################################################## Manage content ########################################################################
+#################################################################################################################################################################
+
+@login_required
+@transaction.atomic
+def modify_content(request, id, tp):
+
+    if tp=='meal':
+        return modify_meal(request, id)
+    if tp=='menu':
+        return modify_menu(request, id)
+
+
+@login_required
+@transaction.atomic
+def delete_content(request, id, tp):
+
+    if tp=='meal':
+        return delete_meal(request, id)
+    if tp=='menu':
+        return delete_menu(request, id)
+
+
+
+
+@login_required
+@transaction.atomic
+def create_meal(request):
+    '''
+        Manage the creation of a Meal object
+    '''
+
+    new_meal = Meal.objects.create(
+        name=request.POST.get('name'),
+        description=request.POST.get('description'),
+        picture=request.FILE.get('picture')
+    )
+
+    new_meal.ingredients = request.POST.get('ingredients')
+    new_meal.submeals = request.POST.get('submeals')
+    new_meal.update_infos()
+    new_meal.save()
+
+    return render(request, 'user/home_page', {})
+
+
+@login_required
+@transaction.atomic
+def create_menu(request):
+    '''
+        Manage the creation of a Menu object
+    '''
+
+    new_menu = Menu.objects.create(
+        name=request.POST.get('name'),
+        description=request.POST.get('description'),
+    )
+
+    new_menu.meals = request.POST.get('submeals')
+    new_menu.save()
+
+    return render(request, 'user/home_page', {})
+
+
+@login_required
+@transaction.atomic
+def delete_meal(request, id):
+    '''
+        Manage the deletion of a Meal object
+    '''
+    meal = get_object_or_404(Meal, id=id, user=request.user)
+    meal.delete()
+
+    return render(request, 'user/home_page', {})
+
+
+@login_required
+@transaction.atomic
+def delete_menu(request, id):
+    '''
+        Manage the deletion of a Menu object
+    '''
+    menu = get_object_or_404(Menu, id=id, user=request.user)
+    menu.delete()
+
+    return render(request, 'user/home_page', {})
+
+
+
+@login_required
+@transaction.atomic
+def modify_meal(request, id):
+    '''
+        Update a Meal object
+    '''
+
+    if request.method=='GET':
+        return render(request, 'user/modify_meal.html', {'content': get_object_or_404(Meal, id=id, user=request.user)})
+    else:
+        meal = get_object_or_404(Meal, id=id, user=request.user)
+        meal.name = request.POST.get('name')
+        meal.description = request.POST.get('description'),
+        
+        if request.FILE.get('picture'):
+            meal.picture = request.FILE.get('picture')
+        if request.POST.get('ingredients'):
+            meal.ingredients = request.FILE.get('ingredients')
+        if request.FILE.get('submeals'):
+            meal.submeals = request.FILE.get('submeals')
+        
+        meal.save()
+        meal.update_infos()
+        meal.save()
+
+        return render(request, 'user/home_page', {})
+
+
+
+@login_required
+@transaction.atomic
+def modify_menu(request, id):
+    '''
+        Update a Menu object
+    '''
+    if request.method=='GET':
+        return render(request, 'user/modify_menu.html', {'content': get_object_or_404(Menu, id=id, user=request.user)})
+    else:
+
+        menu = get_object_or_404(Menu, id=id, user=request.user)
+        menu.name = request.POST.get('name')
+        menu.description = request.POST.get('description'),
+        
+        if request.FILE.get('meals'):
+            menu.meals = request.FILE.get('meals')
+        
+        menu.save()
+
+        return render(request, 'user/home_page', {})
+
+
 
 
 
 #################################################################################################################################################################
 ################################################################### Searching ###################################################################################
 #################################################################################################################################################################
+
 
 def search(request, filter, order):
     '''
@@ -162,16 +351,21 @@ def search(request, filter, order):
         else:
             with open('results', 'rb') as results_file:
                 results_raw = pickle.Unpickler(results_file).load()
-                results = results_raw['results']
-                filter = results_raw['filter']
-                order = results_raw['order']
-
+                keyword = pickle.Unpickler(results_file).load()
                 # Calls for sorting functions in requirement.py
+                results = sorting_functions[filter](results_raw, order)
 
-            context = {
-                'results': results,
-            }
-            return render(request, request, folder + '/search.html', context)
+        context = {
+            'content': results,
+            'keyword': keyword,
+        }
+        return render(request, folder + '/search.html', context)
     else:
+        key = request.POST.get('keyword')
+        results = list(Food.objects.filter(name__icontains=key)) + list(Meal.objects.filter(name__icontains=key)) + list(Menu.objects.filter(name__icontains=key))
+        
         with open('results', 'wb') as results_file:
-            pass
+            pickle.Pickler(results_file).dump(results)
+            pickle.Pickler(results_file).dump(key)
+            
+        return render(request, folder + '/search.html', {'content' : results, 'keyword': key})

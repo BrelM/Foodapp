@@ -73,6 +73,12 @@ TEMPLATES = [
     },
 ]
 
+
+TEMPLATE_CONTEXT_PROCESSOR = (
+    "django.contrib.auth.context_processor.auth",
+)
+
+
 WSGI_APPLICATION = 'foodapp.wsgi.application'
 
 
