@@ -1,3 +1,4 @@
+from wsgiref import validate
 from django.db import models
 from user.models import Operator
 
@@ -111,6 +112,42 @@ class Ressource(models.Model):
     def __repr__(self) -> str:
         return "Food : "+self.name
 
+    def detail(self):
+        '''
+            Give a more detailed description of the Ressource object
+        '''
+        vitamins = ''
+        minerals = ''
+        for i in self.vitamins.all():
+            vitamins += i.name+", "
+
+        for i in self.minerals.all():
+            minerals += i.name+", "
+
+        vitamins = vitamins[:len(vitamins)-2]
+        minerals = minerals[:len(minerals)-2]
+
+        description = "\
+            Nom: {}<br>\
+            Description: {}<br>\
+            Ingredients:<br>\
+            \tFor: 100g<br>\
+            % of fat: {}<br>\
+            % of proteins: {}<br>\
+            % of fiber: {}<br>\
+            % of carbohydrates: {}<br>\
+            % of water: {}<br>\
+            vitamins: {}<br>\
+            minerals: {}<br>\
+            Energetic value kcal: {} Kcal<br>\
+\n\
+            ".format(self.name, self.description, self.fat, self.proteins, self.fiber, self.carbohydrates, self.water, vitamins, minerals, self.kcal)
+
+        return description
+
+
+
+
 class Food(Ressource):
     '''
         Implementation of Food class
@@ -155,6 +192,9 @@ class Meal(Ressource):
     def set_name(self, name:str):
         self.name = name
     
+    def set_description(self, description):
+        self.description = description
+        
     def __str__(self) -> str:
         return self.__repr__()
 
@@ -168,7 +208,7 @@ class Meal(Ressource):
 
     def count_commentors(self) -> int:
         return self.commentors.count()
-
+    
 
 
 
@@ -246,13 +286,19 @@ class MealCommenting(models.Model):
     date = models.DateField(auto_now=True)
 
 
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "Comment : "+self.content
+
 
 class MenuAppreciation(models.Model):
     '''
         Implementation of the appreciation many to many relationship between Operator model and Menu model
     '''
     appreciator = models.ForeignKey(Operator, on_delete=models.CASCADE, related_name='menuAppreciations')
-    meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
    
     value = models.BooleanField(default=True)
     date = models.DateField(auto_now=True)
@@ -264,11 +310,17 @@ class MenuCommenting(models.Model):
         Implementation of the commenting many to many relationship between Operator model and Menu model
     '''
     commentor = models.ForeignKey(Operator, on_delete=models.CASCADE)
-    meal = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
    
     content = models.CharField(max_length=500, null=False, default='New comment')
     date = models.DateField(auto_now=True)
 
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return "Comment : "+self.content
 
 
 

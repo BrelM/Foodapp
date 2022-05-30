@@ -112,7 +112,7 @@ def food_detail(request, id):
     '''
     food = get_object_or_404(Food, id=id)
     
-    return render(request, folder + '/detail.html', {'content':food})
+    return render(request, folder + '/detail.html', {'element':food})
 
 
 def meal_detail(request, id):
@@ -121,7 +121,7 @@ def meal_detail(request, id):
     '''
     meal = get_object_or_404(Meal, id=id)
     
-    return render(request, folder + '/detail.html', {'content':meal})
+    return render(request, folder + '/detail.html', {'element':meal})
 
 
 def menu_detail(request, id):
@@ -130,8 +130,21 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, folder + '/menu_detail.html', {'content':menu})
+    return render(request, folder + '/menu_detail.html', {'element':menu})
 
+
+def display_comments(request, id, tp):
+    '''
+        Display all the comments made about a Meal or Menu object
+    '''
+    if tp=='meal':
+        element = get_object_or_404(Meal, id=id)
+        comments = get_list_or_404(MealCommenting, meal_id=id)
+    else:
+        element = get_object_or_404(Menu, id=id)
+        comments = get_list_or_404(MenuCommenting, menu_id=id)
+
+    return render(request, folder +'/comments.html', {'element': element, 'comments': comments})
 
 
 
@@ -150,7 +163,7 @@ def like_content(request, id:int, tp:str):
         # Add a like appreciation to a meal
         meal=Meal.objects.get(id=id)
         try:
-            app=MealAppreciation.objects.get(appreciator=request.user, meal=meal)
+            app = get_object_or_404(MealAppreciation, appreciator=request.user, meal=meal)
             app.delete()
         except:
             MealAppreciation.objects.create(appreciator=request.user, meal=meal)
@@ -160,7 +173,7 @@ def like_content(request, id:int, tp:str):
         # Add a like appreciation to a menu
         menu=Menu.objects.get(id=id)
         try:
-            app=MealAppreciation.objects.get(appreciator=request.user, meal=menu)
+            app = get_object_or_404(MealAppreciation, appreciator=request.user, meal=menu)
             app.delete()
         except:
             MealAppreciation.objects.create(appreciator=request.user, meal=menu)
@@ -178,13 +191,13 @@ def comment_content(request, id:int, tp:str, comment:str):
 
     if tp=='meal':        
         # Add a comment on a meal
-        meal=Meal.objects.get(id=id)
+        meal=get_object_or_404(Meal, id=id)
         MealCommenting.objects.create(commentor=request.user, meal=meal, content=comment)
         
         return HttpResponse(str(meal.count_commentors()))
     else:
         # Add a comment on a menu
-        menu=Menu.objects.get(id=id)
+        menu=get_object_or_404(Menu, id=id)
         MenuCommenting.objects.create(commentor=request.user, meal=menu, content=comment)
 
         return HttpResponse(str(menu.count_commentors()))
@@ -293,15 +306,15 @@ def modify_meal(request, id):
         return render(request, 'user/modify_meal.html', {'content': get_object_or_404(Meal, id=id, user=request.user)})
     else:
         meal = get_object_or_404(Meal, id=id, user=request.user)
-        meal.name = request.POST.get('name')
-        meal.description = request.POST.get('description'),
+        meal.set_name(request.POST.get('name'))
+        meal.set_description(request.POST.get('description'))
         
         if request.FILE.get('picture'):
             meal.picture = request.FILE.get('picture')
         if request.POST.get('ingredients'):
-            meal.ingredients = request.FILE.get('ingredients')
+            meal.ingredients = request.POST.get('ingredients')
         if request.FILE.get('submeals'):
-            meal.submeals = request.FILE.get('submeals')
+            meal.submeals = request.POST.get('submeals')
         
         meal.save()
         meal.update_infos()
@@ -322,11 +335,11 @@ def modify_menu(request, id):
     else:
 
         menu = get_object_or_404(Menu, id=id, user=request.user)
-        menu.name = request.POST.get('name')
-        menu.description = request.POST.get('description'),
+        menu.set_name(request.POST.get('name'))
+        menu.set_description(request.POST.get('description'))
         
         if request.FILE.get('meals'):
-            menu.meals = request.FILE.get('meals')
+            menu.meals = request.POST.get('meals')
         
         menu.save()
 

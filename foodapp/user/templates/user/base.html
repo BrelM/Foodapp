@@ -51,8 +51,8 @@
 					<img src="{% static 'visitor/images/list.svg' %}">
 				</a>
 				<div class="user">
-					<a href="">Your meals</a>
-					<a href="">Your Menus</a>
+					<a href="{% url 'user:my_meals' %}">Your meals</a>
+					<a href="{% url 'user:my_menus' %}">Your Menus</a>
 				</div>
 			</div>
 

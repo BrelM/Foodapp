@@ -93,7 +93,7 @@ function commentMeal(id)
 	xhttp.onreadystatechange = function (){
 		
 		if(this.readyState==4 && this.status==200){
-			alert('Commentaire enregistré avec succès!');
+			alert('Your comment has been successfully posted!');
 			document.getElementById('comment').value = "";				
 			nb_comment.innerHTML = this.responseText;
 		}
@@ -114,7 +114,7 @@ function commentMenu(id)
 	xhttp.onreadystatechange = function (){
 		
 		if(this.readyState==4 && this.status==200){
-			alert('Commentaire enregistré avec succès!');
+			alert('Your comment has been successfully posted!');
 			document.getElementById('comment').value = "";				
 			nb_comment.innerHTML = this.responseText;
 		}

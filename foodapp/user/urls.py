@@ -19,6 +19,7 @@ urlpatterns = [
     path('food_detail/<int:id>/', views.food_detail, name='food_detail'),
     path('meal_detail/<int:id>/', views.meal_detail, name='meal_detail'),
     path('menu_detail/<int:id>/', views.menu_detail, name='menu_detail'),
+    path('display_comments/<int:id>/<str:tp>/', views.display_comments, name='display_comments'),
 
 
     #Manage content

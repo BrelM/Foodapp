@@ -4,64 +4,94 @@
 {% load static %}
 <div class="conteneur">
 	{% for element in content %}
-		<div class="item">
-			<div class="item-image">
-				<a href="#" class="image-cadre">
+	<div class="item">
+		<div class="item-image">
+				{% if element.get_unit %}
+					<a href="{% url 'visitor:food_detail' id=element.id %}" class="image-cadre">
 					<img src="{{ element.picture.url }}" class="round-image-borders">
-				</a>
+				{% else %}
+					{% if element.picture %}
+						<a href="{% url 'visitor:meal_detail' id=element.id %}" class="image-cadre">
+						<img src="{{ element.picture.url }}" class="round-image-borders">
+					{% else %}
+						<a href="{% url 'visitor:menu_detail' id=element.id %}" class="image-cadre">
+						Pas d'image disponible
+					{% endif %}
+				{% endif %}
+			</a>
+		</div>
+
+		<div class="empty-frame"></div>
+		<div class="item-content">
+			<div class="item-title">
+				<p class="">
+					{{ element.get_name }}
+				</p>
 			</div>
 
-			<div class="empty-frame"></div>
-			<div class="item-content">
-				<div class="item-title">
+			{% if element.get_unit %}
+				<a href="{% url 'visitor:food_detail' id=element.id %}" class="a-content">
+			{% else %}
+				{% if element.picture %}
+					<a href="{% url 'visitor:meal_detail' id=element.id %}" class="a-content">
+				{% else %}
+					<a href="{% url 'visitor:menu_detail' id=element.id %}" class="a-content">
+				{% endif %}
+			{% endif %}
+				<div class="between-detail-elements"></div>
+				<div class="item-description">
 					<p class="">
-						{{ element.get_name }}
+						{% if element.get_description != "unknown description" %}{{ element.get_description }}{% else %}No description available{% endif %}
+						
 					</p>
 				</div>
-				<a href="#" class="a-content">
-					<div class="between-detail-elements"></div>
-					<div class="item-description">
-						<p class="">
-							{% if element.get_description != "unknown description" %}{{ element.get_description }}{% else %}No description available{% endif %}
-						</p>
+			</a>
+			<div class="between-detail-elements"></div>
+			{% if element.get_unit is None %}
+			<div class="item-appre">
+				<div class="like-comment">
+					<div class="like">
+						
+						<a href="#" onclick=logInFirst() class="appre-image">
+							<img id="like_image" src="{% static 'visitor/images/like.png' %}">
+						</a>
+						<p id='nb_like' class="number">{{ element.count_likers }}</p>
 					</div>
-				</a>
-				<div class="between-detail-elements"></div>
-				{% if element.get_unit is None %}	<div class="item-appre">
-					<div class="like-comment">
-						<div class="like">
-							<a href="#" class="appre-image" onclick="alert('You just liked!')">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
-							</a>
-							<p class="number">1K</p>
-						</div>
-						<div class="between-like-comment"></div>
-						<div class="comment">
-							<a href="#" class="appre-image">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
-							</a>
-							<p class="number">20</p>
-						</div>
-					</div>
-					<div class="comment-bar">
-						<div class="comment-input">
-							<form name="comment" action="#" method="get">
-								<input type="text" class="input-zone" name="keyword" placeholder="Write something" required>
-							</form>
-						</div>
-						<div class="send-comment">
-							<a href="#" class="appre-image">
-								<img src="{% static 'visitor/images/gear-fill.svg' %}">
-							</a>
-						</div>
-					</div>
-				</div>{% endif %}
-			</div>
-			
+					<div class="between-like-comment"></div>
+					<div class="comment">					
 
+						{% if element.picture %}
+							<a href="{% url 'visitor:display_comments' id=element.id tp='meal' %}" class="appre-image">
+						{% else %}
+							<a href="{% url 'visitor:display_comments' id=element.id tp='menu' %}" class="appre-image">
+						{% endif %}
+						
+							<img src="{% static 'visitor/images/comment.png' %}">
+						</a>
+						<p id='nb_comment' class="number">{{ element.count_commentors }}</p>
+					</div>
+				</div>
+				<div class="comment-bar">
+					<div class="comment-input">
+						<form name="comment" action='#' onsubmit=logInFirst() id="comment-form"  method="GET">
+							<input type="text" class="input-zone" name="comment" id="comment" placeholder="Write something" required>
+						</form>
+					</div>
+					<div class="send-comment">
+						<input id='id' type='1' value="{{ element.id }}" hidden>
+						<a href="#" onclick=logInFirst() class="appre-image">
+							<img src="{% static 'visitor/images/send1.png' %}">
+						</a>
+					</div>
+				</div>
+			</div>
+			{% endif %}
 		</div>
 		
 
-		{% endfor %}
+	</div>
+	
+
+	{% endfor %}
 </div>
 {% endblock %}

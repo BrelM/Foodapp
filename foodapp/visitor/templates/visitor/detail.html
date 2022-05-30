@@ -1,0 +1,94 @@
+{% extends 'visitor/base.html' %}
+{% block content %}
+
+{% load static %}
+<div class="conteneur">
+	<div class="item" style="flex-direction:column; background-color: #3d3c3c; height:90%; border: 2px solid black;">
+
+			<div class="item-title" style="height:10%">
+				<p class="">
+					{{ element.get_name }}
+				</p>
+			</div>
+
+			<div class="between-detail-elements"></div>
+			<div class="item-image">
+				{% if element.get_unit %}
+					<a href="{% url 'visitor:food_detail' id=element.id %}" class="image-cadre">
+					<img src="{{ element.picture.url }}" class="round-image-borders">
+				{% else %}
+					{% if element.picture %}
+						<a href="{% url 'visitor:meal_detail' id=element.id %}" class="image-cadre">
+						<img src="{{ element.picture.url }}" class="round-image-borders">
+					{% else %}
+						<a href="{% url 'visitor:menu_detail' id=element.id %}" class="image-cadre">
+						Pas d'image disponible
+					{% endif %}
+				{% endif %}
+					</a>
+			</div>
+
+			<div class="between-detail-elements"></div>
+			{% if element.get_unit is None %}
+			<div class="item-appre" style="height:20%; padding-top:0%;">
+				<div class="like-comment">
+					<div class="like">
+						{% if element.picture %}
+							<a href="#"  onclick=logInFirst()  class="appre-image" style="padding-top:0%;">
+						{% else %}
+							<a href="#"  onclick=logInFirst()  class="appre-image" style="padding-top:0%;">
+						{% endif %}
+						{% if visitor in element.likers.all %}
+							<img id="like_image" src="{% static 'visitor/images/liked.png' %}">
+						{% else %}
+							<img id="like_image" src="{% static 'visitor/images/like.png' %}">
+						{% endif %}
+							
+						</a>
+						<p id='nb_like' class="number">{{ element.count_likers }}</p>
+					</div>
+					<div class="between-like-comment"></div>
+						<div class="comment">					
+							
+							{% if element.picture %}
+								<a href="{% url 'visitor:display_comments' id=element.id tp='meal' %}" class="appre-image" style="padding-top:0%;">
+							{% else %}
+								<a href="{% url 'visitor:display_comments' id=element.id tp='menu' %}" class="appre-image" style="padding-top:0%;">
+							{% endif %}
+							
+								<img src="{% static 'visitor/images/comment.png' %}">
+							</a>
+							<p id='nb_comment' class="number">{{ element.count_commentors }}</p>
+						</div>
+					</div>
+				<div class="comment-bar" style="justify-content:flex-end;">
+					<div class="comment-input">
+
+						{% if element.picture %}
+							<form name="comment" action='#' onsubmit=commentMeal('id') id="comment-form"  method="GET">
+						{% else %}
+							<form name="comment" action='#' onsubmit=commentMenu('id') id="comment-form"  method="GET">
+						{% endif %}
+
+							<input type="text" class="input-zone"  style="width:650%;" name="comment" id="comment" placeholder="Write something" required>
+						</form>
+					</div>
+					<div class="send-comment" style="width:5%; margin-left:10%;">
+						<input id='id' type='1' value="{{ element.id }}" hidden>
+						{% if element.picture %}
+							<a href="#"  onclick=logInFirst()  class="appre-image" style="margin-top:6%; margin-left:10%;">
+						{% else %}
+							<a href="#"  onclick=logInFirst()  class="appre-image" style="margin-top:6%; margin-left:16%;">
+						{% endif %}
+							<img src="{% static 'visitor/images/send1.png' %}">
+						</a>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		
+	</div>
+	<div class="item" style="color:white; align-items:flex-start; justify-content:center; padding-top:7%; font-size:200%;">{% autoescape off %}{{element.detail}}{% endautoescape %}</div>
+
+</div>
+{% endblock %}

@@ -157,7 +157,7 @@
 {
 	display: flex;
 	justify-content: center;
-	padding-top: 4%;
+	padding-top: 15%;
 	margin-top: 10%;
 	width: 45%;
 	height: 45%;
@@ -210,4 +210,11 @@
 	display: flex;
 	height: 100%;
 	width: 20%;
+}
+
+
+.author
+{
+	display:flex;
+	background: red;
 }

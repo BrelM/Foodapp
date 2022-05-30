@@ -115,7 +115,7 @@ def food_detail(request, id):
     '''
     food = get_object_or_404(Food, id=id)
     
-    return render(request, folder + '/food_detail.html', {'content':food})
+    return render(request, folder + '/detail.html', {'element':food})
 
 
 def meal_detail(request, id):
@@ -124,7 +124,7 @@ def meal_detail(request, id):
     '''
     meal = get_object_or_404(Meal, id=id)
     
-    return render(request, folder + '/meal_detail.html', {'content':meal})
+    return render(request, folder + '/detail.html', {'element':meal})
 
 
 def menu_detail(request, id):
@@ -133,9 +133,22 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, folder + '/menu_detail.html', {'content':menu})
+    return render(request, folder + '/detail.html', {'element':menu})
 
 
+
+def display_comments(request, id, tp):
+    '''
+        Display all the comments made about a Meal or Menu object
+    '''
+    if tp=='meal':
+        element = get_object_or_404(Meal, id=id)
+        comments = get_list_or_404(MealCommenting, meal_id=id)
+    else:
+        element = get_object_or_404(Menu, id=id)
+        comments = get_list_or_404(MenuCommenting, menu_id=id)
+
+    return render(request, folder +'/comments.html', {'element': element, 'comments': comments})
 
 
 
