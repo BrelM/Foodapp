@@ -88,7 +88,7 @@
 			{% endif %}
 		
 	</div>
-	<div class="item" style="color:white; align-items:flex-start; justify-content:center; padding-top:7%">{{element.get_description}}</div>
+	<div class="item" style="color:white; align-items:flex-start; justify-content:center; padding-top:7%; font-size:200%;">{% autoescape off %}{{element.detail}}{% endautoescape %}</div>
 
 </div>
 {% endblock %}

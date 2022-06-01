@@ -14,14 +14,14 @@
 			<div class="between-detail-elements"></div>
 			<div class="item-image">
 				{% if element.get_unit %}
-					<a href="{% url 'visitor:food_detail' id=element.id %}" class="image-cadre">
+					<a href="{% url 'user:food_detail' id=element.id %}" class="image-cadre">
 					<img src="{{ element.picture.url }}" class="round-image-borders">
 				{% else %}
 					{% if element.picture %}
-						<a href="{% url 'visitor:meal_detail' id=element.id %}" class="image-cadre">
+						<a href="{% url 'user:meal_detail' id=element.id %}" class="image-cadre">
 						<img src="{{ element.picture.url }}" class="round-image-borders">
 					{% else %}
-						<a href="{% url 'visitor:menu_detail' id=element.id %}" class="image-cadre">
+						<a href="{% url 'user:menu_detail' id=element.id %}" class="image-cadre">
 						Pas d'image disponible
 					{% endif %}
 				{% endif %}
@@ -38,7 +38,7 @@
 						{% else %}
 							<a href="#"  onclick=logInFirst()  class="appre-image" style="padding-top:0%;">
 						{% endif %}
-						{% if visitor in element.likers.all %}
+						{% if user in element.likers.all %}
 							<img id="like_image" src="{% static 'visitor/images/liked.png' %}">
 						{% else %}
 							<img id="like_image" src="{% static 'visitor/images/like.png' %}">
@@ -51,9 +51,9 @@
 						<div class="comment">					
 							
 							{% if element.picture %}
-								<a href="{% url 'visitor:display_comments' id=element.id tp='meal' %}" class="appre-image" style="padding-top:0%;">
+								<a href="{% url 'user:display_comments' id=element.id tp='meal' %}" class="appre-image" style="padding-top:0%;">
 							{% else %}
-								<a href="{% url 'visitor:display_comments' id=element.id tp='menu' %}" class="appre-image" style="padding-top:0%;">
+								<a href="{% url 'user:display_comments' id=element.id tp='menu' %}" class="appre-image" style="padding-top:0%;">
 							{% endif %}
 							
 								<img src="{% static 'visitor/images/comment.png' %}">
