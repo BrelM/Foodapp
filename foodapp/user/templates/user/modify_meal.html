@@ -1,0 +1,31 @@
+{% extends 'user/base.html' %}
+{% block content %}
+
+ <div id="sp">
+    entrer les nouveaux elements de votre plat
+</div>
+    <form id="form" action="" method="POST">
+        <div class="item-connexion">
+                <label for="nom">NOM DU PLAT</label>
+                <input id="input-nom" type="text" id="nom" ><br><br>
+                <label for="lipides">TAUX DE LIPIDE</label>
+                <input id="input-lipides" type="text" id="lipides"><br><br>
+                <label for="proteines">QTE DE PROTEINE</label>
+                <input id="input-proteines" type="text" id= "proteines"><br><br>
+                <label for = "glucides">QTE DE GLUCIDE</label>
+                <input id="input-glucides" type="text" id= "glucides"><br><br>
+                <label for="fibres">TAUX DE FIBRE</label>
+                <input id="input-fibres" type="text" id="fibres"><br><br>
+                <label for="eau">QTE D'EAU</label>
+                <input id="input-eau" type="text" id="eau"><br><br>
+                <label for="calories">KILO CALORIES</label>
+                <input id="input-calories" type="text" id="calories"><br><br>
+                <div class="item-connexion">
+                    <input type="submit" value="enregistrer">
+                </div>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
