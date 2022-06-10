@@ -1,22 +1,50 @@
 {% extends 'user/base.html' %}
+
 {% block content %}
 
+{% load static %}
+
+<div class="main-connexion" style="padding-top: 2%; padding-bottom: 2%; margin-top: 4%;">
+	<div id="sp">
+		Please, give some informations about your the menu you want to create
+	</div>
+	{% if errors %}
+		{% for key, error in errors %}
+			{% autoescape off %}
+				{{ errors }}
+			{% endautoescape %}
+		{% endfor %}
+	{% endif %}
 
 
-<div id="sp">
-                veuillez creer votre menu    
-    </div>
-    <form id="form" action="" method="POST">
-        <div class="item-connexion">
-                <label for="nom">NOM DU MENU</label>
-                <input id="input-nom" type="text" id="nom" ><br><br>
-                <label for="MENU">DECRIVER VOTRE MENU</label>
-                <input id="input-MENU" type="text" id="MENU"><br><br>
-                    <input type="submit" value="enregistrer">
-                </div>
-        </div>
+	<form id="form" name='form' action="{% url 'user:create_menu' %}" method="POST">
 
-    </form>
+        {% csrf_token %}
+        <div class="item-connexion {% if form.name.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.name.id_for_label }}">Name</label>
+			{{ form.name }}
+		</div>
+        <div id="errorLogin">{{ errors.name }}</div>
+
+        <div class="item-connexion {% if form.description.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.description.id_for_label }}">Description</label>
+			{{ form.description }}
+		</div>
+        <div id="errorMail">{{ errors.description }}</div>
+
+		<div class=" {% if form.submeals.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.meals.id_for_label }}">Meals</label>
+			{{ form.meals }}
+		</div>
+		
+        <div class="item-connexion"style="padding-top:0%;">
+			<!--a id='hideConf' href="#" onclick=checkAll('form') style="height:100%; padding: 3% 0% 0% 5%">Sign up</a-->
+			<input type="submit" value="create">
+		</div>
+
+	</form>
+
+	
 </div>
 
-{% endblock %}
+{% endblock content %}

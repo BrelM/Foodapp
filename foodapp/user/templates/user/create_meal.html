@@ -1,32 +1,61 @@
 {% extends 'user/base.html' %}
+
 {% block content %}
 
-<div id="sp">
-    veuillez saisir  les elements nutritifs de votre PLAT
+{% load static %}
+
+<div class="main-connexion" style="padding-top: 2%; padding-bottom: 2%; margin-top: 4%;">
+	<div id="sp">
+		Please, give some informations about your the meal you want to create
+	</div>
+	{% if errors %}
+		{% for key, error in errors %}
+			{% autoescape off %}
+				{{ errors }}
+			{% endautoescape %}
+		{% endfor %}
+	{% endif %}
+
+
+	<form id="form" name='form' action="{% url 'user:create_meal' %}" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        <div class="item-connexion {% if form.name.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.name.id_for_label }}">Name</label>
+			{{ form.name }}
+		</div>
+        <div id="errorLogin">{{ errors.name }}</div>
+
+        <div class="item-connexion {% if form.description.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.description.id_for_label }}">Description</label>
+			{{ form.description }}
+		</div>
+        <div id="errorMail">{{ errors.description }}</div>
+
+		<div class=" {% if form.ingredients.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.ingredients.id_for_label }}">Ingredients</label>
+			{{ form.ingredients }}
+		</div>
+
+		<div class=" {% if form.submeals.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.submeals.id_for_label }}">Submeals</label>
+			{{ form.submeals }}
+		</div>
+		
+		<div class="item-connexion {% if form.picture.errors %} has-warning has-feedback {% endif %}">
+			<label for="{{ form.Picture.id_for_label }}">Picture</label>
+			{{ form.picture }}
+		</div>
+		
+		
+        <div class="item-connexion"style="padding-top:0%;">
+			<!--a id='hideConf' href="#" onclick=checkAll('form') style="height:100%; padding: 3% 0% 0% 5%">Sign up</a-->
+			<input type="submit" value="create">
+		</div>
+
+	</form>
+
+	
 </div>
-<form id="form" action="" method="POST">
-    <div class="item-connexion">
-            <label for="nom">NOM DU PLAT</label>
-            <input id="input-nom" type="text" id="nom" ><br><br>
-            <label for="lipides">TAUX DE LIPIDE</label>
-            <input id="input-lipides" type="text" id="lipides"><br><br>
-            <label for="proteines">QTE DE PROTEINE</label>
-            <input id="input-proteines" type="text" id= "proteines"><br><br>
-            <label for = "glucides">QTE DE GLUCIDE</label>
-            <input id="input-glucides" type="text" id= "glucides"><br><br>
-            <label for="fibres">TAUX DE FIBRE</label>
-            <input id="input-fibres" type="text" id="fibres"><br><br>
-            <label for="eau">QTE D'EAU</label>
-            <input id="input-eau" type="text" id="eau"><br><br>
-            <label for="calories">KILO CALORIES</label>
-            <input id="input-calories" type="text" id="calories"><br><br>
-            <label for = "date_creation">DATE_CREATION</label>
-            <input id="input-date_creation" type="text" id = "date_creation">
-            <div class="item-connexion">
-                <input type="submit" value="enregistrer">
-            </div>
-    </div>
 
-</form>
-{% endblock %}
-
+{% endblock content %}

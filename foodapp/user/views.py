@@ -9,6 +9,7 @@ from visitor.views import sorting_functions
 import pickle
 
 from visitor.requirement import *
+from .forms import *
 
 folder = 'user'
 
@@ -56,7 +57,7 @@ def all_foods(request):
     '''
         Display all available Food objects in the database
     '''
-    foods = get_list_or_404(Food)
+    foods = Food.objects.all()
 
     return render(request, folder + '/foods.html', {'content':foods})
 
@@ -67,7 +68,7 @@ def all_meals(request):
     '''
         Display all available Meal objects in the database
     '''
-    meals = get_list_or_404(Meal)
+    meals = Meal.objects.all()
 
     return render(request, folder + '/meals.html', {'content':meals})
 
@@ -78,7 +79,7 @@ def my_meals(request):
     '''
         Display Meal objects managed by the current user
     '''
-    meals = get_list_or_404(Meal, operator=request.user)
+    meals = Meal.objects.filter(operator=request.user)
 
     return render(request, folder + '/meals.html', {'content':meals})
 
@@ -90,7 +91,7 @@ def all_menus(request):
     '''
         Display all available Menu objects in the database
     '''
-    menus = get_list_or_404(Menu)
+    menus = Menu.objects.all()
 
     return render(request, folder + '/menus.html', {'content':menus})
 
@@ -101,7 +102,7 @@ def my_menus(request):
     '''
         Display Menu objects managed by the current user
     '''
-    menus = get_list_or_404(Menu, operator=request.user)
+    menus = Menu.objects.filter(operator=request.user)
 
     return render(request, folder + '/menus.html', {'content':menus})
 
@@ -130,7 +131,7 @@ def menu_detail(request, id):
     '''
     menu = get_object_or_404(Menu, id=id)
     
-    return render(request, folder + '/menu_detail.html', {'element':menu})
+    return render(request, folder + '/detail.html', {'element':menu})
 
 
 def display_comments(request, id, tp):
@@ -138,11 +139,11 @@ def display_comments(request, id, tp):
         Display all the comments made about a Meal or Menu object
     '''
     if tp=='meal':
-        element = get_object_or_404(Meal, id=id)
-        comments = get_list_or_404(MealCommenting, meal_id=id)
+        element = Meal.objects.get(id=id)
+        comments = MealCommenting.objects.filter(meal_id=id)
     else:
-        element = get_object_or_404(Menu, id=id)
-        comments = get_list_or_404(MenuCommenting, menu_id=id)
+        element = Menu.objects.get(id=id)
+        comments = MenuCommenting.objects.filter(menu_id=id)
 
     return render(request, folder +'/comments.html', {'element': element, 'comments': comments})
 
@@ -167,18 +168,18 @@ def like_content(request, id:int, tp:str):
             app.delete()
         except:
             MealAppreciation.objects.create(appreciator=request.user, meal=meal)
-        
+
         return HttpResponse(str(meal.count_likers()))
     else:
         # Add a like appreciation to a menu
         menu=Menu.objects.get(id=id)
         try:
-            app = get_object_or_404(MealAppreciation, appreciator=request.user, meal=menu)
+            app = get_object_or_404(MenuAppreciation, appreciator=request.user, menu=menu)
             app.delete()
         except:
-            MealAppreciation.objects.create(appreciator=request.user, meal=menu)
+            MenuAppreciation.objects.create(appreciator=request.user, menu=menu)
 
-        return HttpResponse(str(meal.count_likers()))
+        return HttpResponse(str(menu.count_likers()))
 
 
 
@@ -238,18 +239,37 @@ def create_meal(request):
         Manage the creation of a Meal object
     '''
 
-    new_meal = Meal.objects.create(
-        name=request.POST.get('name'),
-        description=request.POST.get('description'),
-        picture=request.FILE.get('picture')
-    )
+    if request.method == 'GET':
+        form = MealForm()
+        return render(request, 'user/create_meal.html', {'form':form})
+    else:
+        form = MealForm(request.POST, request.FILES)
 
-    new_meal.ingredients = request.POST.get('ingredients')
-    new_meal.submeals = request.POST.get('submeals')
-    new_meal.update_infos()
-    new_meal.save()
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            picture = request.FILES.get('picture')
+            ingredients = form.cleaned_data['ingredients']
+            submeals = form.cleaned_data['submeals']
+        
+            new_meal = Meal.objects.create(
+                name=name,
+                description=description,
+                picture=picture,
+                operator=request.user
+            )
 
-    return render(request, 'user/home_page', {})
+            new_meal.ingredients.set(ingredients)
+            new_meal.submeals.set(submeals)
+            new_meal.update_infos()
+            new_meal.save()
+    
+            return HttpResponseRedirect('/user/home_page/')
+        else:
+            print(request.POST)
+            form = MealForm()
+            return render(request, 'user/create_meal.html', {'errors':form.errors.items(), 'form': form})        
+
 
 
 @login_required
@@ -259,15 +279,33 @@ def create_menu(request):
         Manage the creation of a Menu object
     '''
 
-    new_menu = Menu.objects.create(
-        name=request.POST.get('name'),
-        description=request.POST.get('description'),
-    )
 
-    new_menu.meals = request.POST.get('submeals')
-    new_menu.save()
+    if request.method == 'GET':
+        form = MenuForm()
+        return render(request, 'user/create_menu.html', {'form':form})
+    else:
+        form = MenuForm(request.POST)
 
-    return render(request, 'user/home_page', {})
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            meals = form.cleaned_data['meals']
+        
+            new_menu = Menu.objects.create(
+                name=name,
+                description=description,
+                operator=request.user
+            )
+
+            new_menu.meals.set(meals)
+            new_menu.save()
+    
+            return HttpResponseRedirect('/user/home_page/')
+        else:
+            print(request.POST)
+            form = MenuForm()
+            return render(request, 'user/create_menu.html', {'errors':form.errors.items(), 'form': form})        
+
 
 
 @login_required
@@ -301,7 +339,7 @@ def modify_meal(request, id):
     '''
         Update a Meal object
     '''
-
+    
     if request.method=='GET':
         return render(request, 'user/modify_meal.html', {'content': get_object_or_404(Meal, id=id, user=request.user)})
     else:

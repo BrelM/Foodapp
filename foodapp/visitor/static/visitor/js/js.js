@@ -35,8 +35,8 @@ function unhidePassword(pwd){
 
 function likeMeal(id)
 {
-	nb_like = document.getElementById('nb_like');
-	id = document.getElementById('id').value;
+	id = document.getElementById(id).value;
+	nb_like = document.getElementById('nb_likemeal'+id);
 
 	xhttp = new XMLHttpRequest();
 	
@@ -44,9 +44,9 @@ function likeMeal(id)
 		
 		if(this.readyState==4 && this.status==200){
 			if(parseInt(nb_like.innerHTML) > this.responseText)
-				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+				document.getElementById('like_imagemeal'+id).src = "/static/visitor/images/like.png";
 			if(parseInt(nb_like.innerHTML) < this.responseText)
-				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				document.getElementById('like_imagemeal'+id).src = "/static/visitor/images/liked.png";
 				
 			nb_like.innerHTML = this.responseText;
 		}
@@ -59,18 +59,18 @@ function likeMeal(id)
 
 function likeMenu(id)
 {
-	nb_like = document.getElementById('nb_like');
-	id = document.getElementById('id').value;
+	id = document.getElementById(id).value;
+	nb_like = document.getElementById('nb_likemenu'+id);
 
 	xhttp = new XMLHttpRequest();
-	
+
 	xhttp.onreadystatechange = function (){
 		
 		if(this.readyState==4 && this.status==200){
 			if(parseInt(nb_like.innerHTML) > this.responseText)
-				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+				document.getElementById('like_imagemenu'+id).src = "/static/visitor/images/like.png";
 			if(parseInt(nb_like.innerHTML) < this.responseText)
-				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				document.getElementById('like_imagemenu'+id).src = "/static/visitor/images/liked.png";
 				
 			nb_like.innerHTML = this.responseText;
 		}
@@ -85,8 +85,8 @@ function likeMenu(id)
 
 function commentMeal(id)
 {
-	nb_comment = document.getElementById('nb_comment');
-	id = document.getElementById('id').value;
+	id = document.getElementById(id).value;
+	nb_comment = document.getElementById('nb_commentmeal'+id);
 
 	xhttp = new XMLHttpRequest();
 	
@@ -94,20 +94,20 @@ function commentMeal(id)
 		
 		if(this.readyState==4 && this.status==200){
 			alert('Your comment has been successfully posted!');
-			document.getElementById('comment').value = "";				
+			document.getElementById('commentmeal'+id).value = "";				
 			nb_comment.innerHTML = this.responseText;
 		}
 	}
 
-	xhttp.open('GET', '/user/comment_content/'+id+'/meal/'+document.getElementById('comment').value+'/', true);
+	xhttp.open('GET', '/user/comment_content/'+id+'/meal/'+document.getElementById('commentmeal'+id).value+'/', true);
 	xhttp.send();
 }
 
 
 function commentMenu(id)
 {
-	nb_comment = document.getElementById('nb_comment');
-	id = document.getElementById('id').value;
+	id = document.getElementById(id).value;
+	nb_comment = document.getElementById('nb_commentmenu'+id);
 
 	xhttp = new XMLHttpRequest();
 	
@@ -115,12 +115,12 @@ function commentMenu(id)
 		
 		if(this.readyState==4 && this.status==200){
 			alert('Your comment has been successfully posted!');
-			document.getElementById('comment').value = "";				
+			document.getElementById('commentmenu'+id).value = "";				
 			nb_comment.innerHTML = this.responseText;
 		}
 	}
 
-	xhttp.open('GET', '/user/comment_content/'+id+'/menu/'+document.getElementById('comment').value+'/', true);
+	xhttp.open('GET', '/user/comment_content/'+id+'/menu/'+document.getElementById('commentmenu'+id).value+'/', true);
 	xhttp.send();
 }
 

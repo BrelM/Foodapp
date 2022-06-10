@@ -139,8 +139,7 @@ class Ressource(models.Model):
             % of water: {}<br>\
             vitamins: {}<br>\
             minerals: {}<br>\
-            Energetic value kcal: {} Kcal<br>\
-\n\
+            Energetic value kcal: {} Kcal<br>\n\
             ".format(self.name, self.description, self.fat, self.proteins, self.fiber, self.carbohydrates, self.water, vitamins, minerals, self.kcal)
 
         return description
@@ -177,7 +176,7 @@ class Meal(Ressource):
             Update nutrient attributes values taking in charge the nutrient attributes values of the composing Food objects
         '''
 
-        elements = list(self.elements.all()) + list(self.submeals.all())
+        elements = list(self.ingredients.all()) + list(self.submeals.all())
 
         for element in elements:
             self.fat += element.get_fat()
@@ -186,8 +185,11 @@ class Meal(Ressource):
             self.carbohydrates += element.get_carbohydrates()
             self.water += element.get_water()
             self.kcal += element.get_kcal()
-            self.vitamins += element.get_vitamins()
-            self.minerals += element.get_minerals()
+            for i in element.vitamins.all():
+                self.vitamins.add(i)
+            for i in element.minerals.all():
+                self.minerals.add(i)
+    
     
     def set_name(self, name:str):
         self.name = name

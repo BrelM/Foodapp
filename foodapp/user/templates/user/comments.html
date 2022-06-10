@@ -34,9 +34,9 @@
 				<div class="like-comment">
 					<div class="like">
 						{% if element.picture %}
-							<a href="#"  onclick=logInFirst()  class="appre-image" style="padding-top:0%;">
+							<a href="#"  onclick=likeMeal('id')  class="appre-image" style="padding-top:0%;">
 						{% else %}
-							<a href="#"  onclick=logInFirst()  class="appre-image" style="padding-top:0%;">
+							<a href="#"  onclick=likeMenu('id')  class="appre-image" style="padding-top:0%;">
 						{% endif %}
 						{% if user in element.likers.all %}
 							<img id="like_image" src="{% static 'visitor/images/liked.png' %}">
@@ -76,9 +76,9 @@
 					<div class="send-comment" style="width:5%; margin-left:10%;">
 						<input id='id' type='1' value="{{ element.id }}" hidden>
 						{% if element.picture %}
-							<a href="#"  onclick=logInFirst()  class="appre-image" style="margin-top:6%; margin-left:10%;">
+							<a href="#"  onclick=commentMeal('id')  class="appre-image" style="margin-top:6%; margin-left:10%;">
 						{% else %}
-							<a href="#"  onclick=logInFirst()  class="appre-image" style="margin-top:6%; margin-left:16%;">
+							<a href="#"  onclick=commentMenu('id')  class="appre-image" style="margin-top:6%; margin-left:16%;">
 						{% endif %}
 							<img src="{% static 'visitor/images/send1.png' %}">
 						</a>
@@ -91,7 +91,7 @@
 	{% for comment in comments %}
 		<div class="item" style="color:white; align-items:center; justify-content:center; padding-top:7%; height:10%; min-height:1%; padding-top:0%; padding-top:1%; border:2px solid #3d3c3c; flex-direction:column;">
 			{{comment.content}}
-			<div style="display:flex; margin-left: 70%; margin-top: 2%;">By {{ comment.commentor.get_username }}</div>
+			<div style="display:flex; margin-left: 70%; margin-top: 2%;">By {{ comment.commentor.get_username }} on {{ comment.date }}</div>
 		</div>
 	{% endfor %}
 
