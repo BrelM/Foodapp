@@ -199,7 +199,7 @@ def comment_content(request, id:int, tp:str, comment:str):
     else:
         # Add a comment on a menu
         menu=get_object_or_404(Menu, id=id)
-        MenuCommenting.objects.create(commentor=request.user, meal=menu, content=comment)
+        MenuCommenting.objects.create(commentor=request.user, menu=menu, content=comment)
 
         return HttpResponse(str(menu.count_commentors()))
 
@@ -264,7 +264,7 @@ def create_meal(request):
             new_meal.update_infos()
             new_meal.save()
     
-            return HttpResponseRedirect('/user/home_page/')
+            return HttpResponseRedirect('/user/my_meals/')
         else:
             print(request.POST)
             form = MealForm()
@@ -300,7 +300,7 @@ def create_menu(request):
             new_menu.meals.set(meals)
             new_menu.save()
     
-            return HttpResponseRedirect('/user/home_page/')
+            return HttpResponseRedirect('/user/my_menus/')
         else:
             print(request.POST)
             form = MenuForm()

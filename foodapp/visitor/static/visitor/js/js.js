@@ -126,6 +126,103 @@ function commentMenu(id)
 
 
 
+
+
+function ulikeMeal(id)
+{
+	nb_like = document.getElementById('nb_like');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			if(parseInt(nb_like.innerHTML) > this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+			if(parseInt(nb_like.innerHTML) < this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				
+			nb_like.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/like_content/'+id+'/meal/', true);
+	xhttp.send();
+}
+
+
+function ulikeMenu(id)
+{
+	nb_like = document.getElementById('nb_like');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			if(parseInt(nb_like.innerHTML) > this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/like.png";
+			if(parseInt(nb_like.innerHTML) < this.responseText)
+				document.getElementById('like_image').src = "/static/visitor/images/liked.png";
+				
+			nb_like.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/like_content/'+id+'/menu/', true);
+	xhttp.send();
+}
+
+
+
+
+function ucommentMeal(id)
+{
+	nb_comment = document.getElementById('nb_comment');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			alert('Your comment has been successfully posted!');
+			document.getElementById('comment').value = "";				
+			nb_comment.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/comment_content/'+id+'/meal/'+document.getElementById('comment').value+'/', true);
+	xhttp.send();
+}
+
+
+function ucommentMenu(id)
+{
+	nb_comment = document.getElementById('nb_comment');
+	id = document.getElementById('id').value;
+
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = function (){
+		
+		if(this.readyState==4 && this.status==200){
+			alert('Your comment has been successfully posted!');
+			document.getElementById('comment').value = "";				
+			nb_comment.innerHTML = this.responseText;
+		}
+	}
+
+	xhttp.open('GET', '/user/comment_content/'+id+'/menu/'+document.getElementById('comment').value+'/', true);
+	xhttp.send();
+}
+
+
+
+
+
 function logInFirst(ea,edd)
 {
 	alert("You have to log in first!");

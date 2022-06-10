@@ -15,7 +15,7 @@
 							<img src="{{ element.picture.url }}" class="round-image-borders">
 						{% else %}
 							<a href="{% url 'user:menu_detail' id=element.id %}" class="image-cadre">
-							Pas d'image disponible
+								Pas d'image disponible pour ce menu
 						{% endif %}
 					{% endif %}
 				</a>
@@ -40,7 +40,7 @@
 				{% endif %}
 					<div class="between-detail-elements"></div>
 					<div class="item-description">
-						<p class="">
+						<p class="" style="padding:35px;">
 							{% if element.get_description != "unknown description" %}{{ element.get_description }}{% else %}No description available{% endif %}
 							
 						</p>

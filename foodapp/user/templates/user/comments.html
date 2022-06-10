@@ -34,9 +34,9 @@
 				<div class="like-comment">
 					<div class="like">
 						{% if element.picture %}
-							<a href="#"  onclick=likeMeal('id')  class="appre-image" style="padding-top:0%;">
+							<a href="#"  onclick=ulikeMeal('id')  class="appre-image" style="padding-top:0%;">
 						{% else %}
-							<a href="#"  onclick=likeMenu('id')  class="appre-image" style="padding-top:0%;">
+							<a href="#"  onclick=ulikeMenu('id')  class="appre-image" style="padding-top:0%;">
 						{% endif %}
 						{% if user in element.likers.all %}
 							<img id="like_image" src="{% static 'visitor/images/liked.png' %}">
@@ -65,9 +65,9 @@
 					<div class="comment-input">
 
 						{% if element.picture %}
-							<form name="comment" action='#' onsubmit=commentMeal('id') id="comment-form"  method="GET">
+							<form name="comment" action='#' onsubmit=ucommentMeal('id') id="comment-form"  method="GET">
 						{% else %}
-							<form name="comment" action='#' onsubmit=commentMenu('id') id="comment-form"  method="GET">
+							<form name="comment" action='#' onsubmit=ucommentMenu('id') id="comment-form"  method="GET">
 						{% endif %}
 
 							<input type="text" class="input-zone"  style="width:650%;" name="comment" id="comment" placeholder="Write something" required>
@@ -76,9 +76,9 @@
 					<div class="send-comment" style="width:5%; margin-left:10%;">
 						<input id='id' type='1' value="{{ element.id }}" hidden>
 						{% if element.picture %}
-							<a href="#"  onclick=commentMeal('id')  class="appre-image" style="margin-top:6%; margin-left:10%;">
+							<a href="#"  onclick=ucommentMeal('id')  class="appre-image" style="margin-top:6%; margin-left:10%;">
 						{% else %}
-							<a href="#"  onclick=commentMenu('id')  class="appre-image" style="margin-top:6%; margin-left:16%;">
+							<a href="#"  onclick=ucommentMenu('id')  class="appre-image" style="margin-top:6%; margin-left:16%;">
 						{% endif %}
 							<img src="{% static 'visitor/images/send1.png' %}">
 						</a>
